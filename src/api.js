@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "https://kbp.dndts.net/api/method";
+const API_BASE = "https://edumart.dndts.net/api/method";
 
 const api = {
   /**
@@ -34,7 +34,6 @@ const api = {
    */
   sendOrderToServer: async (payload) => {
     try {
-      console.log(payload)
       const response = await axios.post(
         `${API_BASE}/create_invoice_pos`,
         payload
@@ -47,10 +46,30 @@ const api = {
       );
     }
   },
+
+  /**
+   * Optional Bill Confirmation API call (same as sendOrderToServer?)
+   */
+  BillConfirm: async (payload) => {
+    try {
+      const response = await axios.post(`${API_BASE}/invoice_print`, payload);
+      return response?.data.invoice_url;
+    } catch (error) {
+      console.error("Order send error", error);
+      throw new Error(
+        error?.response?.data?.error || "Failed to process payment."
+      );
+    }
+  },
 };
 
 export default api;
 
 // Optional: Named exports for direct usage
-export const { getItems, searchCustomers, createCustomer, sendOrderToServer } =
-  api;
+export const {
+  getItems,
+  searchCustomers,
+  createCustomer,
+  sendOrderToServer,
+  BillConfirm,
+} = api;

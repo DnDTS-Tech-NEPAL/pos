@@ -288,7 +288,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
 
                 <div className="mb-4">
                   <label className="block text-sm font-medium mb-1">
-                    Email Address (Optional)
+                    Address (Optional)
                   </label>
                   <input
                     type="email"
@@ -300,10 +300,10 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
 
                 <div className="mb-4">
                   <label className="block text-sm font-medium mb-1">
-                    Date of Birth (Optional)
+                    Tax Id (Optional)
                   </label>
                   <input
-                    type="date"
+                    type="text"
                     value={newCustomerDOB}
                     onChange={(e) => setNewCustomerDOB(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#ff9a9e]"
