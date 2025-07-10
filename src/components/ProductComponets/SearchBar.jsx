@@ -111,13 +111,13 @@ const SearchBar = ({
       <label
         className={`flex items-center gap-3 px-3 rounded-full border transition-all duration-200 shadow-sm ${
           isFocused
-            ? "border-[#fa81a5] ring-2 ring-[#ffe4ee]"
+            ? "border-[#d1161b] ring-2 ring-[#ffe4ee]"
             : "border-gray-300"
         } bg-white text-gray-700`}
       >
         <Search
           className={`text-base sm:text-lg transition-colors duration-200 ${
-            isFocused ? "text-[#fa81a5]" : "text-gray-400"
+            isFocused ? "text-[#d1161b]" : "text-gray-400"
           }`}
         />
         <input

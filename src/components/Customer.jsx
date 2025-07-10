@@ -130,16 +130,16 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
     <>
       {customer?.name && customer.name !== "Walk In Customer" ? (
         <div className="flex gap-3">
-          <div className="flex items-center justify-between bg-[--primary-color] border border-[#ff9a9e] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#a00030] font-semibold text-sm cursor-pointer">
+          <div className="flex items-center justify-between bg-[var(--primary-color)] border border-[#15459c] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#15459c] font-semibold text-sm cursor-pointer">
             <span className="truncate flex-grow text-left">
               Points:{customer.total_points}
             </span>
           </div>
           <div
-            className="flex items-center justify-between bg-[--primary-color] border border-[#ff9a9e] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#a00030] font-semibold text-sm cursor-pointer"
+            className="flex items-center justify-between bg-[var(--primary-color)] border border-[#15459c] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#15459c] font-semibold text-sm cursor-pointer"
             onClick={handleOpenSearchModal}
           >
-            <FontAwesomeIcon icon={faUserTag} className="mr-2 text-[#fa81a5]" />
+            <FontAwesomeIcon icon={faUserTag} className="mr-2 text-[#15459c]" />
             <span className="truncate flex-grow text-left">
               {customer.full_name}
             </span>
@@ -148,7 +148,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                 e.stopPropagation();
                 setCustomer({});
               }}
-              className="ml-3 text-[#ff9a9e] hover:text-[#fa81a5]"
+              className="ml-3 text-[#15459c] hover:text-[#15459c]"
               title="Clear customer"
             >
               <FontAwesomeIcon icon={faTimes} />
@@ -158,13 +158,13 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
       ) : (
         <button
           onClick={handleOpenSearchModal}
-          className="flex items-center justify-center bg-white border border-gray-300 rounded-full px-4 py-2 shadow-sm hover:border-[#fa81a5] hover:ring-2 hover:ring-[--primary-color] w-full max-w-sm mx-auto text-gray-700 text-sm font-medium"
+          className="flex items-center justify-center bg-white border border-gray-300 rounded-full px-4 py-2 shadow-sm hover:border-[#15459c] hover:ring-2 hover:ring-[--primary-color] w-full max-w-sm mx-auto text-gray-700 text-sm font-medium"
         >
           <FontAwesomeIcon icon={faSearch} className="mr-2 text-gray-400" />
           <span className="flex-grow text-center">Select Customer</span>
           <FontAwesomeIcon
             icon={faCirclePlus}
-            className="ml-2 text-[#fa81a5]"
+            className="ml-2 text-[#15459c]"
           />
         </button>
       )}
@@ -184,7 +184,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                 <h3 className="text-xl font-bold text-gray-800 mb-4">
                   Search & Select Customer
                 </h3>
-                <div className="flex items-center border border-gray-300 rounded-full p-2.5 mb-4 bg-white shadow-sm focus-within:border-[#fa81a5] focus-within:ring-2 focus-within:ring-[--primary-color]">
+                <div className="flex items-center border border-gray-300 rounded-full p-2.5 mb-4 bg-white shadow-sm focus-within:border-[#15459c] focus-within:ring-2 focus-within:ring-[--primary-color]">
                   <FontAwesomeIcon
                     icon={faSearch}
                     className="text-gray-400 ml-1 mr-2"
@@ -192,7 +192,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                   <input
                     ref={searchInputRef}
                     type="text"
-                    placeholder="Search by name, full name or email..."
+                    placeholder="Search by name, full name or taxid..."
                     value={inputCustomer}
                     onChange={(e) => setInputCustomer(e.target.value)}
                     className="flex-grow text-base text-gray-800 bg-transparent outline-none"
@@ -209,7 +209,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
 
                 <button
                   onClick={handleAddClick}
-                  className="mb-4 w-full py-2.5 px-4 rounded-lg bg-[#fa81a5] text-white font-medium hover:bg-[#ff9a9e] shadow-md"
+                  className="mb-4 w-full py-2.5 px-4 rounded-lg bg-[#15459c] text-white font-medium hover:bg-[#15459c] shadow-md"
                 >
                   <FontAwesomeIcon icon={faCirclePlus} className="mr-2" />
                   Add New Customer
@@ -237,9 +237,9 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                           <div className="text-sm text-gray-500">
                             Phone: {custItem.phone_number || custItem.name}
                           </div>
-                          {custItem.email_address && (
+                          {custItem.tax_id && (
                             <div className="text-sm text-gray-500">
-                              Email: {custItem.email_address}
+                              Tax Id: {custItem.tax_id}
                             </div>
                           )}
                         </div>
@@ -269,7 +269,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     value={newCustomerFullName}
                     onChange={(e) => setNewCustomerFullName(e.target.value)}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#ff9a9e]"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#15459c]"
                   />
                 </div>
 
@@ -282,7 +282,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     value={newCustomerPhoneNumber}
                     onChange={(e) => setNewCustomerPhoneNumber(e.target.value)}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#ff9a9e]"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#15459c] focus:border-[#15459c]"
                   />
                 </div>
 
@@ -294,7 +294,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     type="email"
                     value={newCustomerEmailAddress}
                     onChange={(e) => setNewCustomerEmailAddress(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#ff9a9e]"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#15459c] focus:border-[#15459c]"
                   />
                 </div>
 
@@ -306,7 +306,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     type="text"
                     value={newCustomerDOB}
                     onChange={(e) => setNewCustomerDOB(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#ff9a9e]"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#15459c]"
                   />
                 </div>
 
@@ -320,7 +320,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#fa81a5] text-white hover:bg-[#ff9a9e] rounded-md"
+                    className="px-4 py-2 bg-[#15459c] text-white hover:bg-[#15459c] rounded-md"
                   >
                     Add Customer
                   </button>

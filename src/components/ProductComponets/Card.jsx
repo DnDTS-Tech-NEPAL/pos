@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-const FALLBACK_IMAGE_URL = "/logo.webp";
+const FALLBACK_IMAGE_URL =
+  "https://edumart.dndts.net/files/shiva.png";
 
 const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
   const [zoomPosition, setZoomPosition] = useState({ x: "50%", y: "50%" });

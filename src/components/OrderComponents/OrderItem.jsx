@@ -41,7 +41,7 @@ const OrderItem = ({ order, setOrders }) => {
     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-2 border border-gray-200 rounded-xl shadow bg-white transition-all duration-200">
       {/* Image */}
       <img
-        src={img}
+        src="https://edumart.dndts.net/files/shiva.png"
         alt={name}
         className="w-14 h-14 sm:w-12 sm:h-12 object-cover rounded-md "
       />
@@ -75,8 +75,8 @@ const OrderItem = ({ order, setOrders }) => {
               <FontAwesomeIcon icon={faCirclePlus} />
             </button>
             <div className="text-sm font-semibold mx-3 text-gray-700">
-            Rs. {(price ).toFixed(2)}
-          </div>
+              Rs. {price.toFixed(2)}
+            </div>
           </div>
         </div>
 

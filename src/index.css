@@ -1,6 +1,6 @@
 @import "tailwindcss";
 .root {
-  --primary-color: #ffe4ee;
+  --primary-color: blue;
   --accent-color: #ff9a9e;
   --card-radius: 1rem;
 }

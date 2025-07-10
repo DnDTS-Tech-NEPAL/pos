@@ -117,7 +117,7 @@ const Order = ({
         <div className="space-y-0">
           <div className="flex justify-between items-center pb-2">
             <span className="font-bold">Subtotal</span>
-            <span className="font-medium text-[#fa81a5]">
+            <span className="font-medium text-[#d1161b]">
               Rs. {subtotal.toFixed(2)}
             </span>
           </div>
@@ -133,7 +133,7 @@ const Order = ({
                     onClick={() => handleDiscountTypeChange("flat")}
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       discountType === "flat"
-                        ? "bg-[#fa81a5] text-white"
+                        ? "bg-[#d1161b] text-white"
                         : "bg-gray-50 text-gray-600 hover:bg-gray-100"
                     }`}
                   >
@@ -143,7 +143,7 @@ const Order = ({
                     onClick={() => handleDiscountTypeChange("percent")}
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       discountType === "percent"
-                        ? "bg-[#fa81a5] text-white"
+                        ? "bg-[#d1161b] text-white"
                         : "bg-gray-50 text-gray-600 hover:bg-gray-100"
                     }`}
                   >
@@ -158,9 +158,9 @@ const Order = ({
                     onFocus={() => setIsDiscountInputFocused(true)}
                     onBlur={() => setIsDiscountInputFocused(false)}
                     placeholder="Add discount"
-                    className={`w-full text-sm border border-[#fa81a5] rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 ${
+                    className={`w-full text-sm border border-[#d1161b] rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 ${
                       isDiscountInputFocused
-                        ? "focus:ring-[#fa81a5] focus:border-[#fa81a5]"
+                        ? "focus:ring-[#d1161b] focus:border-[#d1161b]"
                         : "focus:ring-gray-300 focus:border-gray-300"
                     }`}
                   />
@@ -181,7 +181,7 @@ const Order = ({
                   value={redeemedPoints} // Use the prop value
                   onChange={handleRedeemedPointsChange} // Use the prop handler
                   placeholder={`Max: ${customer.total_points || 0}`}
-                  className="w-full text-sm  border border-[#fa81a5] rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 focus:ring-[#fa81a5] focus:border-[#fa81a5]"
+                  className="w-full text-sm  border border-[#d1161b] rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 focus:ring-[#d1161b] focus:border-[#d1161b]"
                 />
               </div>
             </div>
@@ -189,7 +189,7 @@ const Order = ({
             {totalDiscount > 0 && (
               <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
                 <span>Total Discount Applied</span>
-                <span className="text-[#fa81a5]">
+                <span className="text-[#d1161b]">
                   - Rs. {totalDiscount.toFixed(2)}
                 </span>
               </div>
@@ -199,12 +199,12 @@ const Order = ({
           {/* VAT & Total */}
           <div className="flex justify-between items-center font-semibold border-t border-gray-100 pt-2">
             <span className="font-bold">VAT (13%)</span>
-            <span className="text-[#fa81a5]">Rs. {vatAmount.toFixed(2)}</span>
+            <span className="text-[#d1161b]">Rs. {vatAmount.toFixed(2)}</span>
           </div>
 
           <div className="flex justify-between items-center font-semibold border-t border-gray-100 pt-2">
             <span className="font-bold">Total</span>
-            <span className="text-[#fa81a5]">Rs. {finalTotal.toFixed(2)}</span>
+            <span className="text-[#d1161b]">Rs. {finalTotal.toFixed(2)}</span>
           </div>
 
           {/* Buttons */}
@@ -217,7 +217,7 @@ const Order = ({
             </button>
             <button
               onClick={handleSendOrder}
-              className="w-full px-3 py-2 bg-[#fa81a5] hover:bg-[#ff9a9e] text-white font-medium rounded-lg cursor-pointer transition-colors text-sm"
+              className="w-full px-3 py-2 bg-[#15459c] hover:bg-[] text-white font-medium rounded-lg cursor-pointer transition-colors text-sm"
             >
               Pay Now
             </button>

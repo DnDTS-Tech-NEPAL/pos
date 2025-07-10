@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { X, Check, ArrowRight } from "lucide-react";
-import { sendOrderToServer } from "../../api";
+import { sendOrderToServer, BillConfirm1 } from "../../api";
 import BillConfirm from "./BillConfirm";
 
 const PaymentModal = ({
@@ -18,7 +18,7 @@ const PaymentModal = ({
   const [selectedMethods, setSelectedMethods] = useState([]);
   const [remarks, setRemarks] = useState("");
   const [showBillConfirm, setShowBillConfirm] = useState(false);
-  const [orderResponseData, setOrderResponseData] = useState({});
+  const [orderResponseData, setOrderResponseData] = useState(null);
 
   const allPaymentMethods = [
     {
@@ -181,7 +181,7 @@ const PaymentModal = ({
       invoice_name: orderResponseData.invoice_name,
       invoice_type: "Tax Invoice",
     };
-    const data = await BillConfirm(payload);
+    const data = await BillConfirm1(payload);
     console.log(data);
     window.open(data, "_blank");
     // Handle bill printing logic here
@@ -201,8 +201,8 @@ const PaymentModal = ({
       invoice_name: orderResponseData.invoice_name,
       invoice_type: "Abbreviated Tax Invoice",
     };
-    const data = await BillConfirm(payload);
-    console.log(data);
+    const data = await BillConfirm1(payload);
+
     window.open(data, "_blank");
 
     setCustomer({});
@@ -216,7 +216,7 @@ const PaymentModal = ({
     <>
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-2xl w-full max-w-5xl mx-auto max-h-[95vh] overflow-hidden shadow-2xl">
-          <div className="bg-gradient-to-r from-[#fa81a5] to-[#ff9a9e] px-4 py-3 text-white relative">
+          <div className=" bg-[#15459c] px-4 py-3 text-white relative">
             <div className="relative flex justify-between items-center">
               <div>
                 <h2 className="text-lg font-bold">Complete Payment</h2>

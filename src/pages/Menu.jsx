@@ -8,7 +8,8 @@ import MessageAlert from "../components/MessageAlert";
 import { v4 as uuidv4 } from "uuid";
 import api from "../api";
 
-const FALLBACK_IMAGE_URL = "/logo.webp";
+const FALLBACK_IMAGE_URL =
+  "https://edumart.dndts.net/files/shiva.png";
 
 const normalize = (str) => str?.toLowerCase().replace(/[\s-]/g, "") || "";
 

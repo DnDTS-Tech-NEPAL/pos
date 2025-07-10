@@ -12,7 +12,7 @@ const BillConfirm = ({ onYes, onNo, total }) => {
           >
             Tax Invoice
           </button>
-          {!total > 10000 && (
+          {total <= 10000 && (
             <button
               onClick={onNo}
               className="px-4 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow"

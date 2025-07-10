@@ -50,10 +50,11 @@ const api = {
   /**
    * Optional Bill Confirmation API call (same as sendOrderToServer?)
    */
-  BillConfirm: async (payload) => {
+  BillConfirm1: async (payload) => {
     try {
       const response = await axios.post(`${API_BASE}/invoice_print`, payload);
-      return response?.data.invoice_url;
+      console.log("this",response)
+      return response?.data.message;
     } catch (error) {
       console.error("Order send error", error);
       throw new Error(
@@ -71,5 +72,5 @@ export const {
   searchCustomers,
   createCustomer,
   sendOrderToServer,
-  BillConfirm,
+  BillConfirm1,
 } = api;
