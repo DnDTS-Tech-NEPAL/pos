@@ -11,15 +11,21 @@ const Order = ({
   orders,
   setOrders,
   handleSendOrder,
-  setTotal,
+  setTotal, // To update total in Menu
   customer = {},
-  redeemedPoints = 0,
-  setRedeemedPoints,
+  redeemedPoints,
+  setRedeemedPoints, // Setter from Menu
+  // --- Props from Menu.jsx for discount and type ---
+  discount, // The discount amount state from Menu (renamed from discountAmount)
+  setDiscount, // The setDiscountAmount setter from Menu
+  discountType, // The discount type state from Menu
+  setDiscountType, // The setDiscountType setter from Menu
+  handleClearCart, // Clear cart handler from Menu
 }) => {
-  const [discount, setDiscount] = useState(0);
-  const [discountType, setDiscountType] = useState("flat");
+  // `isDiscountInputFocused` remains local
   const [isDiscountInputFocused, setIsDiscountInputFocused] = useState(false);
 
+  // `sanitizeDiscount` remains local as it's used for calculations here
   const sanitizeDiscount = (value, type, subtotal) => {
     if (type === "percent") {
       return value > 100 ? 100 : value < 0 ? 0 : value;
@@ -28,6 +34,7 @@ const Order = ({
     }
   };
 
+  // --- ALL CALCULATIONS REMAIN LOCAL ---
   const subtotal = orders.reduce(
     (sum, item) => sum + item.price * (item.quantity || 0),
     0
@@ -45,47 +52,43 @@ const Order = ({
   const vatAmount = afterDiscount * 0.13;
   const finalTotal = afterDiscount + vatAmount;
 
+  // Effect to update total in Menu (keep as is)
   useEffect(() => {
     setTotal(parseFloat(finalTotal.toFixed(2)));
   }, [finalTotal, setTotal]);
 
+  // Effect to re-sanitize discount when type or subtotal changes (apply to the prop setter)
   useEffect(() => {
+    // When discountType or subtotal changes, re-sanitize the current 'discount' value
+    // This calls the setDiscountAmount setter from Menu.jsx
     setDiscount((currentDiscount) =>
       sanitizeDiscount(currentDiscount, discountType, subtotal)
     );
-  }, [discountType, subtotal]);
+  }, [discountType, subtotal, setDiscount]); // setDiscount is now a prop (setDiscountAmount)
 
+  // Handlers now use the setters passed as props
   const handleDiscountChange = (e) => {
     const cleaned = e.target.value.replace(/[^\d.]/g, "");
     const dotCount = (cleaned.match(/\./g) || []).length;
     if (dotCount > 1) return;
 
     const val = parseFloat(cleaned) || 0;
-    setDiscount(sanitizeDiscount(val, discountType, subtotal));
+    setDiscount(sanitizeDiscount(val, discountType, subtotal)); // Use prop setter (setDiscountAmount)
   };
 
   const handleDiscountTypeChange = (type) => {
-    setDiscountType(type);
+    setDiscountType(type); // Use prop setter (setDiscountType)
     setDiscount((currentDiscount) =>
       sanitizeDiscount(currentDiscount, type, subtotal)
-    );
+    ); // Use prop setter (setDiscountAmount)
   };
 
   const handleRedeemedPointsChange = (e) => {
     const val = parseInt(e.target.value.replace(/\D/g, ""), 10);
-    if (!isNaN(val)) {
-      if (val <= (customer.total_points || 0)) {
-        setRedeemedPoints(val);
-      }
-    } else {
-      setRedeemedPoints(0);
-    }
-  };
-
-  const handleClearCart = () => {
-    setOrders([]);
-    setDiscount(0);
-    setRedeemedPoints(0);
+    // Ensure points don't exceed available points
+    setRedeemedPoints(
+      isNaN(val) ? 0 : Math.min(val, customer.total_points || 0)
+    ); // Use prop setter (setRedeemedPoints)
   };
 
   return (
@@ -119,7 +122,7 @@ const Order = ({
             </span>
           </div>
 
-          {/* Discount and Redeem Points - SAME LINE */}
+          {/* Discount and Redeem Points */}
           <div className="flex flex-col border-t border-gray-100 pt-2">
             <div className="flex gap-2 mb-2">
               {/* Discount Section */}
@@ -150,8 +153,8 @@ const Order = ({
                 <div className="relative flex-1">
                   <input
                     type="text"
-                    value={discount}
-                    onChange={handleDiscountChange}
+                    value={discount} // Use the prop value
+                    onChange={handleDiscountChange} // Use the prop handler
                     onFocus={() => setIsDiscountInputFocused(true)}
                     onBlur={() => setIsDiscountInputFocused(false)}
                     placeholder="Add discount"
@@ -175,13 +178,22 @@ const Order = ({
                 </label>
                 <input
                   type="text"
-                  value={redeemedPoints}
-                  onChange={handleRedeemedPointsChange}
+                  value={redeemedPoints} // Use the prop value
+                  onChange={handleRedeemedPointsChange} // Use the prop handler
                   placeholder={`Max: ${customer.total_points || 0}`}
                   className="w-full text-sm  border border-[#fa81a5] rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 focus:ring-[#fa81a5] focus:border-[#fa81a5]"
                 />
               </div>
             </div>
+            {/* Display total discount */}
+            {totalDiscount > 0 && (
+              <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
+                <span>Total Discount Applied</span>
+                <span className="text-[#fa81a5]">
+                  - Rs. {totalDiscount.toFixed(2)}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* VAT & Total */}
@@ -198,7 +210,7 @@ const Order = ({
           {/* Buttons */}
           <div className="grid grid-cols-2 gap-2 pt-2">
             <button
-              onClick={handleClearCart}
+              onClick={handleClearCart} // Use the prop handler
               className="w-full px-3 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer font-medium text-sm"
             >
               Clear Cart

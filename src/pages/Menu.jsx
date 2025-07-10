@@ -209,11 +209,10 @@ const Menu = () => {
               handleSendOrder={handleSendOrder}
               setTotal={setTotal}
               redeemedPoints={redeemedPoints}
-              a
               setRedeemedPoints={setRedeemedPoints}
               customer={customer}
-              discountAmount={discountAmount}
-              setDiscountAmount={setDiscountAmount}
+              discount={discountAmount} // ✅ pass value correctly
+              setDiscount={setDiscountAmount} // ✅ pass setter correctly
               discountType={discountType}
               setDiscountType={setDiscountType}
             />

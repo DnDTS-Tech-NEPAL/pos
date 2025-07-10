@@ -130,13 +130,13 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
     <>
       {customer?.name && customer.name !== "Walk In Customer" ? (
         <div className="flex gap-3">
-          <div className="flex items-center justify-between bg-[#ffe4ee] border border-[#ff9a9e] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#a00030] font-semibold text-sm cursor-pointer">
+          <div className="flex items-center justify-between bg-[--primary-color] border border-[#ff9a9e] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#a00030] font-semibold text-sm cursor-pointer">
             <span className="truncate flex-grow text-left">
               Points:{customer.total_points}
             </span>
           </div>
           <div
-            className="flex items-center justify-between bg-[#ffe4ee] border border-[#ff9a9e] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#a00030] font-semibold text-sm cursor-pointer"
+            className="flex items-center justify-between bg-[--primary-color] border border-[#ff9a9e] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#a00030] font-semibold text-sm cursor-pointer"
             onClick={handleOpenSearchModal}
           >
             <FontAwesomeIcon icon={faUserTag} className="mr-2 text-[#fa81a5]" />
@@ -158,11 +158,14 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
       ) : (
         <button
           onClick={handleOpenSearchModal}
-          className="flex items-center justify-center bg-white border border-gray-300 rounded-full px-4 py-2 shadow-sm hover:border-[#fa81a5] hover:ring-2 hover:ring-[#ffe4ee] w-full max-w-sm mx-auto text-gray-700 text-sm font-medium"
+          className="flex items-center justify-center bg-white border border-gray-300 rounded-full px-4 py-2 shadow-sm hover:border-[#fa81a5] hover:ring-2 hover:ring-[--primary-color] w-full max-w-sm mx-auto text-gray-700 text-sm font-medium"
         >
           <FontAwesomeIcon icon={faSearch} className="mr-2 text-gray-400" />
           <span className="flex-grow text-center">Select Customer</span>
-          <FontAwesomeIcon icon={faCirclePlus} className="ml-2 text-[#fa81a5]" />
+          <FontAwesomeIcon
+            icon={faCirclePlus}
+            className="ml-2 text-[#fa81a5]"
+          />
         </button>
       )}
 
@@ -181,7 +184,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                 <h3 className="text-xl font-bold text-gray-800 mb-4">
                   Search & Select Customer
                 </h3>
-                <div className="flex items-center border border-gray-300 rounded-full p-2.5 mb-4 bg-white shadow-sm focus-within:border-[#fa81a5] focus-within:ring-2 focus-within:ring-[#ffe4ee]">
+                <div className="flex items-center border border-gray-300 rounded-full p-2.5 mb-4 bg-white shadow-sm focus-within:border-[#fa81a5] focus-within:ring-2 focus-within:ring-[--primary-color]">
                   <FontAwesomeIcon
                     icon={faSearch}
                     className="text-gray-400 ml-1 mr-2"
@@ -213,13 +216,15 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                 </button>
 
                 {isLoadingSearch ? (
-                  <p className="text-center text-gray-500 py-10">Searching...</p>
+                  <p className="text-center text-gray-500 py-10">
+                    Searching...
+                  </p>
                 ) : customers.length > 0 ? (
                   <ul className="flex-grow overflow-y-auto border-t pt-3">
                     {customers.map((custItem) => (
                       <li
                         key={custItem.name}
-                        className="p-3.5 cursor-pointer hover:bg-[#ffe4ee] border-b flex items-start"
+                        className="p-3.5 cursor-pointer hover:bg-[--primary-color] border-b flex items-start"
                         onClick={() => {
                           setCustomer(custItem);
                           handleCloseSearchModal();
@@ -264,7 +269,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     value={newCustomerFullName}
                     onChange={(e) => setNewCustomerFullName(e.target.value)}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#ffe4ee] focus:border-[#ff9a9e]"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#ff9a9e]"
                   />
                 </div>
 
@@ -277,7 +282,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     value={newCustomerPhoneNumber}
                     onChange={(e) => setNewCustomerPhoneNumber(e.target.value)}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#ffe4ee] focus:border-[#ff9a9e]"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#ff9a9e]"
                   />
                 </div>
 
@@ -289,7 +294,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     type="email"
                     value={newCustomerEmailAddress}
                     onChange={(e) => setNewCustomerEmailAddress(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#ffe4ee] focus:border-[#ff9a9e]"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#ff9a9e]"
                   />
                 </div>
 
@@ -301,7 +306,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     type="date"
                     value={newCustomerDOB}
                     onChange={(e) => setNewCustomerDOB(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#ffe4ee] focus:border-[#ff9a9e]"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[--primary-color] focus:border-[#ff9a9e]"
                   />
                 </div>
 

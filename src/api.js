@@ -34,6 +34,7 @@ const api = {
    */
   sendOrderToServer: async (payload) => {
     try {
+      console.log(payload)
       const response = await axios.post(
         `${API_BASE}/create_invoice_pos`,
         payload

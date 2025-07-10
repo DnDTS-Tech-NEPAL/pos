@@ -1,4 +1,9 @@
 @import "tailwindcss";
+.root {
+  --primary-color: #ffe4ee;
+  --accent-color: #ff9a9e;
+  --card-radius: 1rem;
+}
 
 .root,
 body {

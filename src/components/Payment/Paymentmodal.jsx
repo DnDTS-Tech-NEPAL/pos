@@ -153,7 +153,7 @@ const PaymentModal = ({
       payments: paymentDetails,
       remarks,
     };
-
+    
     setMessage({ text: "Sending order...", type: "info" });
 
     try {
