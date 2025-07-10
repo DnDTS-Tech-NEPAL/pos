@@ -67,6 +67,10 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
     setZoomPosition({ x: "50%", y: "50%" });
   };
 
+  // Price to display:
+  const price =
+    product.standard_rate || product.prices?.[0]?.price_list_rate || 0;
+
   return (
     <div
       onClick={handleClick}
@@ -74,7 +78,7 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
         isOutOfStock
           ? "opacity-50 cursor-not-allowed"
           : "hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer"
-      } flex flex-col overflow-hidden relative ${className}`}
+      } flex flex-col overflow-hidden relative h-65 ${className}`}
     >
       {/* Stock Badge */}
       {typeof product.stock_qty === "number" && (
@@ -107,6 +111,11 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
             e.target.src = FALLBACK_IMAGE_URL;
           }}
         />
+
+        {/* Price badge - blue, top-left */}
+        <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-sm">
+          Rs. {price.toFixed(2)}
+        </div>
       </div>
 
       {/* Info */}
