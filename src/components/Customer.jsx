@@ -6,7 +6,8 @@ import {
   faUserTag,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useRef, useEffect } from "react";
-import { searchCustomers, createCustomer } from "../api"; // ✅ Updated API imports
+import { searchCustomers, createCustomer, getCustomerInvoices } from "../api"; // ✅ Updated API imports
+import InvoiceModal from "./InvoiceModal";
 
 const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
   const [customers, setCustomers] = useState([]);
@@ -19,7 +20,8 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
   const [newCustomerEmailAddress, setNewCustomerEmailAddress] = useState("");
   const [newCustomerPhoneNumber, setNewCustomerPhoneNumber] = useState("");
   const [newCustomerDOB, setNewCustomerDOB] = useState("");
-
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+  const [invoices, setInvoices] = useState([]);
   const searchInputRef = useRef(null);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
@@ -125,14 +127,33 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
       });
     }
   };
+  const customerInvoices = async () => {
+    try {
+      const data = await getCustomerInvoices(customer?.name);
+      setInvoices(data || []);
+      setShowInvoiceModal(true);
+    } catch (err) {
+      setMessage({ type: "error", text: "Could not fetch invoices" });
+      console.error(err);
+    }
+  };
 
   return (
     <>
+      {showInvoiceModal && (
+        <InvoiceModal
+          invoices={invoices}
+          onClose={() => setShowInvoiceModal(false)}
+        />
+      )}
       {customer?.name && customer.name !== "Walk In Customer" ? (
         <div className="flex gap-3">
           <div className="flex items-center justify-between bg-[var(--primary-color)] border border-[#15459c] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#15459c] font-semibold text-sm cursor-pointer">
-            <span className="truncate flex-grow text-left">
-              Points:{customer.total_points}
+            <span
+              className="truncate flex-grow text-left"
+              onClick={customerInvoices}
+            >
+              View Past Invoices
             </span>
           </div>
           <div

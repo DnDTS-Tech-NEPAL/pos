@@ -17,6 +17,12 @@ const api = {
     });
     return response.data.message || [];
   },
+  getCustomerInvoices: async (payload) => {
+    const response = await axios.post(`${API_BASE}/invoice_list`,{
+      customer: payload
+    });
+    return response.data.data || [];
+  },
 
   /**
    * Create a new customer
@@ -73,4 +79,5 @@ export const {
   createCustomer,
   sendOrderToServer,
   BillConfirm1,
+  getCustomerInvoices
 } = api;
