@@ -20,13 +20,10 @@ const Order = ({
   const [discountType, setDiscountType] = useState("flat");
   const [isDiscountInputFocused, setIsDiscountInputFocused] = useState(false);
 
-  // Utility to sanitize discount value based on type and subtotal
   const sanitizeDiscount = (value, type, subtotal) => {
     if (type === "percent") {
-      // Cap percent at 100 and min 0
       return value > 100 ? 100 : value < 0 ? 0 : value;
     } else {
-      // Cap flat discount between 0 and subtotal
       return value > subtotal ? subtotal : value < 0 ? 0 : value;
     }
   };
@@ -36,25 +33,22 @@ const Order = ({
     0
   );
 
-  // Calculate manual discount value
   const manualDiscountValue =
     discountType === "percent" ? (discount / 100) * subtotal : discount;
 
-  // Redeem discount calculation
   const redeemDiscount =
     Math.min(redeemedPoints, customer.total_points || 0) *
     (customer.conversion_factor || 0);
 
-  // Total discount (manual + redeem)
   const totalDiscount = manualDiscountValue + redeemDiscount;
-
-  const finalTotal = Math.max(subtotal - totalDiscount, 0);
+  const afterDiscount = Math.max(subtotal - totalDiscount, 0);
+  const vatAmount = afterDiscount * 0.13;
+  const finalTotal = afterDiscount + vatAmount;
 
   useEffect(() => {
     setTotal(parseFloat(finalTotal.toFixed(2)));
   }, [finalTotal, setTotal]);
 
-  // Sanitize discount value whenever discountType or subtotal changes
   useEffect(() => {
     setDiscount((currentDiscount) =>
       sanitizeDiscount(currentDiscount, discountType, subtotal)
@@ -125,64 +119,75 @@ const Order = ({
             </span>
           </div>
 
-          {/* Discount section */}
-          <div className="border-t border-gray-100 pt-2">
-            <div className="flex items-center gap-2 mb-2">
-              <label className="font-bold">Discount</label>
-              <div className="flex rounded-lg overflow-hidden border border-gray-200">
-                <button
-                  onClick={() => handleDiscountTypeChange("flat")}
-                  className={`px-3 py-1.5 text-sm font-medium transition-colors ${
-                    discountType === "flat"
-                      ? "bg-[#fa81a5] text-white"
-                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  Rs
-                </button>
-                <button
-                  onClick={() => handleDiscountTypeChange("percent")}
-                  className={`px-3 py-1.5 text-sm font-medium transition-colors ${
-                    discountType === "percent"
-                      ? "bg-[#fa81a5] text-white"
-                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  %
-                </button>
+          {/* Discount and Redeem Points - SAME LINE */}
+          <div className="flex flex-col border-t border-gray-100 pt-2">
+            <div className="flex gap-2 mb-2">
+              {/* Discount Section */}
+              <div className="flex items-center gap-2 flex-1">
+                <label className="font-bold">Discount</label>
+                <div className="flex rounded-lg overflow-hidden border border-gray-200">
+                  <button
+                    onClick={() => handleDiscountTypeChange("flat")}
+                    className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                      discountType === "flat"
+                        ? "bg-[#fa81a5] text-white"
+                        : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    Rs
+                  </button>
+                  <button
+                    onClick={() => handleDiscountTypeChange("percent")}
+                    className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                      discountType === "percent"
+                        ? "bg-[#fa81a5] text-white"
+                        : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    %
+                  </button>
+                </div>
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    value={discount}
+                    onChange={handleDiscountChange}
+                    onFocus={() => setIsDiscountInputFocused(true)}
+                    onBlur={() => setIsDiscountInputFocused(false)}
+                    placeholder="Add discount"
+                    className={`w-full text-sm border border-[#fa81a5] rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 ${
+                      isDiscountInputFocused
+                        ? "focus:ring-[#fa81a5] focus:border-[#fa81a5]"
+                        : "focus:ring-gray-300 focus:border-gray-300"
+                    }`}
+                  />
+                  <FontAwesomeIcon
+                    icon={discountType === "flat" ? faRupee : faPercent}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  />
+                </div>
               </div>
-              <div className="relative flex-1">
+
+              {/* Redeem Points */}
+              <div className="flex items-center justify-end gap-2 w-[45%]">
+                <label className="font-bold whitespace-nowrap">
+                  Redeem Points
+                </label>
                 <input
                   type="text"
-                  value={discount}
-                  onChange={handleDiscountChange}
-                  onFocus={() => setIsDiscountInputFocused(true)}
-                  onBlur={() => setIsDiscountInputFocused(false)}
-                  placeholder="Add discount"
-                  className={`w-full text-sm border rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 ${
-                    isDiscountInputFocused
-                      ? "focus:ring-[#fa81a5] focus:border-[#fa81a5]"
-                      : "focus:ring-gray-300 focus:border-gray-300"
-                  }`}
-                />
-                <FontAwesomeIcon
-                  icon={discountType === "flat" ? faRupee : faPercent}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  value={redeemedPoints}
+                  onChange={handleRedeemedPointsChange}
+                  placeholder={`Max: ${customer.total_points || 0}`}
+                  className="w-full text-sm  border border-[#fa81a5] rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 focus:ring-[#fa81a5] focus:border-[#fa81a5]"
                 />
               </div>
             </div>
+          </div>
 
-            {/* Redeem points */}
-            <div className="flex justify-between items-center mb-2">
-              <label className="font-bold">Redeem Points</label>
-              <input
-                type="text"
-                value={redeemedPoints}
-                onChange={handleRedeemedPointsChange}
-                placeholder={`Max: ${customer.total_points || 0}`}
-                className="w-[73%] text-sm border rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 focus:ring-[#fa81a5] focus:border-[#fa81a5]"
-              />
-            </div>
+          {/* VAT & Total */}
+          <div className="flex justify-between items-center font-semibold border-t border-gray-100 pt-2">
+            <span className="font-bold">VAT (13%)</span>
+            <span className="text-[#fa81a5]">Rs. {vatAmount.toFixed(2)}</span>
           </div>
 
           <div className="flex justify-between items-center font-semibold border-t border-gray-100 pt-2">
@@ -190,6 +195,7 @@ const Order = ({
             <span className="text-[#fa81a5]">Rs. {finalTotal.toFixed(2)}</span>
           </div>
 
+          {/* Buttons */}
           <div className="grid grid-cols-2 gap-2 pt-2">
             <button
               onClick={handleClearCart}
