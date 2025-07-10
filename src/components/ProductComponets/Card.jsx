@@ -103,7 +103,7 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
             product.custom_image_1_link || product.image || FALLBACK_IMAGE_URL
           }
           alt={product.item_name}
-          className="object-cover w-full h-full transition-transform duration-200 hover:scale-200"
+          className="object-cover h-full w-full transition-transform duration-200 hover:scale-200"
           style={{
             transformOrigin: `${zoomPosition.x} ${zoomPosition.y}`,
           }}
@@ -114,13 +114,13 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
         />
 
         {/* Price badge - blue, top-left */}
-        <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-sm">
+        <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-full bg-[#15459c] text-white text-xs font-semibold shadow-sm">
           Rs. {price.toFixed(2)}
         </div>
       </div>
 
       {/* Info */}
-      <div className="flex flex-col gap-1 p-3">
+      <div className="flex flex-col gap-1 p-3 ">
         <h3 className="text-sm sm:text-base font-medium text-gray-800 line-clamp-2 leading-snug">
           {product.item_name}
         </h3>

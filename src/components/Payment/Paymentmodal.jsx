@@ -25,36 +25,36 @@ const PaymentModal = ({
       name: "fonePay",
       logo: "/logos/fonepay.png",
       color: "from-[#fa81a5] to-[#ff9a9e]",
-      bgColor: "bg-pink-50",
-      borderColor: "border-pink-300",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
     },
     {
       name: "eSewa",
       logo: "/logos/esewa.png",
       color: "from-[#fa81a5] to-[#ff9a9e]",
-      bgColor: "bg-pink-50",
-      borderColor: "border-pink-300",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
     },
     {
       name: "Khalti",
       logo: "/logos/khalti.png",
       color: "from-[#fa81a5] to-[#ff9a9e]",
-      bgColor: "bg-pink-50",
-      borderColor: "border-pink-300",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
     },
     {
       name: "Cash",
       logo: "/logos/cash.webp",
       color: "from-[#fa81a5] to-[#ff9a9e]",
-      bgColor: "bg-pink-50",
-      borderColor: "border-pink-300",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
     },
     {
       name: "Card",
       logo: "/logos/cash.webp",
       color: "from-[#fa81a5] to-[#ff9a9e]",
-      bgColor: "bg-pink-50",
-      borderColor: "border-pink-300",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
     },
   ];
 
@@ -220,7 +220,7 @@ const PaymentModal = ({
             <div className="relative flex justify-between items-center">
               <div>
                 <h2 className="text-lg font-bold">Complete Payment</h2>
-                <p className="text-pink-100 text-sm">Choose payment method</p>
+                <p className=" text-sm">Choose payment method</p>
               </div>
               <button
                 onClick={handleModalClose}
@@ -251,7 +251,7 @@ const PaymentModal = ({
                           className={`relative p-3 rounded-lg border text-center text-sm transition-all duration-200 ${
                             isSelected
                               ? `${method.borderColor} ${method.bgColor} shadow-md scale-[1.02]`
-                              : "border-gray-200 hover:border-pink-300 hover:shadow-sm"
+                              : "border-gray-200 hover:border-[#15459c] hover:shadow-sm"
                           }`}
                         >
                           {isSelected && (
