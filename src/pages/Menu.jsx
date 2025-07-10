@@ -54,11 +54,19 @@ const Menu = () => {
       const existingIndex = prev.findIndex(
         (order) => order.barcode === product.barcode
       );
+
       if (existingIndex >= 0) {
-        const updated = [...prev];
-        updated[existingIndex].quantity += 1;
-        return updated;
+        // Item already exists, increment quantity
+        const updated = [...prev]; // Create a new array
+        // Create a NEW object for the item you're updating
+        updated[existingIndex] = {
+          ...updated[existingIndex], // Copy all existing properties
+          quantity: updated[existingIndex].quantity + 1, // Increment quantity
+        };
+        return updated; // Return the new array with the new object
       }
+
+      // Item does not exist, add a new one
       return [
         {
           orderId: uuidv4(),
@@ -66,7 +74,9 @@ const Menu = () => {
           name: product.item_name,
           price: product.standard_rate || 0,
           img:
-            product.custom_image_1_link || product.image || FALLBACK_IMAGE_URL,
+            product.custom_image_1_link ||
+            product.image ||
+            "YOUR_FALLBACK_IMAGE_URL", // Use the correct fallback URL
           quantity: 1,
           barcode: product.barcode,
         },

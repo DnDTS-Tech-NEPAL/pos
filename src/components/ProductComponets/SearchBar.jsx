@@ -13,7 +13,9 @@ const SearchBar = ({
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
   const containerRef = useRef(null);
+  const lastMatchedBarcodeRef = useRef(null);
 
+  // --- Outside click effect (keep as is) ---
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -27,26 +29,67 @@ const SearchBar = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // --- Barcode Matching Effect ---
   useEffect(() => {
+    console.log(
+      `[EFFECT] Start - inputProduct: '${inputProduct}', lastMatchedBarcodeRef: '${lastMatchedBarcodeRef.current}'`
+    );
+
     const trimmedInput = inputProduct.trim();
-    if (!trimmedInput) return;
+
+    if (!trimmedInput) {
+      // If input is cleared or empty, reset the last matched barcode
+      console.log(
+        "[EFFECT] Input empty. Resetting lastMatchedBarcodeRef.current to null."
+      );
+      lastMatchedBarcodeRef.current = null;
+      return;
+    }
 
     const normalizedQuery = normalize(trimmedInput);
+    console.log(`[EFFECT] Normalized Query: '${normalizedQuery}'`);
+
+    // Check if this barcode has already been matched and handled in this cycle
+    if (lastMatchedBarcodeRef.current === normalizedQuery) {
+      console.warn(
+        `[EFFECT] Barcode '${normalizedQuery}' already matched and handled. Skipping re-call.`
+      );
+      return; // Exit early if already processed
+    }
 
     const matchedProduct = allItems.find(
       (item) => normalize(item.barcode) === normalizedQuery
     );
 
     if (matchedProduct) {
+      console.log("[EFFECT] === MATCH FOUND! ===");
+      console.log("[EFFECT] Calling onBarcodeMatch with:", matchedProduct);
       onBarcodeMatch?.(matchedProduct);
+
+      // Store the barcode that just caused a match
+      lastMatchedBarcodeRef.current = normalizedQuery;
+      console.log(
+        `[EFFECT] lastMatchedBarcodeRef.current set to: '${lastMatchedBarcodeRef.current}'`
+      );
+
+      console.log(
+        "[EFFECT] Setting inputProduct to empty and setIsFocused(false)."
+      );
       setInputProduct("");
       setIsFocused(false);
+    } else {
+      console.log("[EFFECT] No match found for query:", normalizedQuery);
     }
+    console.log("[EFFECT] End.");
   }, [inputProduct, allItems, onBarcodeMatch, setInputProduct]);
 
   const handleClearInput = () => {
+    console.log(
+      "[CLEAR BUTTON] Clearing input. Resetting lastMatchedBarcodeRef.current to null."
+    );
     setInputProduct("");
     inputRef.current?.focus();
+    lastMatchedBarcodeRef.current = null; // Also reset on manual clear
   };
 
   const filteredItems = useMemo(() => {
