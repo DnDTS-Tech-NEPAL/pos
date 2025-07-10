@@ -2,7 +2,7 @@ const PaymentMethod = ({ name, logo, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center justify-center gap-1 h-32 w-full px-3 py-2 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:scale-105 transition-transform duration-200 hover:border-pink-300"
+      className="flex flex-col items-center justify-center gap-1 h-32 w-full px-3 py-2 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:scale-105 transition-transform duration-200 hover:border-[#15459c]"
     >
       <div className="flex items-center justify-center h-16 w-16 rounded-full bg-gray-50 p-1.5">
         <img

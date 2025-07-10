@@ -255,7 +255,7 @@ const PaymentModal = ({
                           }`}
                         >
                           {isSelected && (
-                            <div className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-r from-[#fa81a5] to-[#ff9a9e] rounded-full flex items-center justify-center shadow-sm">
+                            <div className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-r bg-[#15459c] rounded-full flex items-center justify-center shadow-sm">
                               <Check className="w-3 h-3 text-white" />
                             </div>
                           )}
@@ -301,7 +301,7 @@ const PaymentModal = ({
                               onChange={(e) =>
                                 handleAmountChange(method.name, e.target.value)
                               }
-                              className="w-full pl-10 pr-2 py-1.5 text-sm border border-pink-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#fa81a5]"
+                              className="w-full pl-10 pr-2 py-1.5 text-sm border border-[#15459c] rounded-md focus:outline-none focus:ring-2 focus:ring-[#15459c]"
                             />
                           </div>
                           <div className="col-span-5">
@@ -315,7 +315,7 @@ const PaymentModal = ({
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-1.5 text-sm border border-pink-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#fa81a5]"
+                              className="w-full px-3 py-1.5 text-sm border border-[#15459c] rounded-md focus:outline-none focus:ring-2 focus:ring-[#15459c]]"
                             />
                           </div>
                         </div>
@@ -327,7 +327,7 @@ const PaymentModal = ({
 
               {/* Right - Summary and Remarks */}
               <div className="space-y-4">
-                <div className="bg-pink-50 border border-pink-100 rounded-lg p-4">
+                <div className="bg-white border border-gray-100 rounded-lg p-4">
                   <h3 className="text-base font-semibold text-gray-800 mb-3">
                     Payment Summary
                   </h3>
@@ -340,7 +340,7 @@ const PaymentModal = ({
                     </div>
                     <div className="flex justify-between">
                       <span>Amount Paid:</span>
-                      <span className="text-[#fa81a5] font-semibold">
+                      <span className="text-[#15459c]] font-semibold">
                         Rs. {totalPaid.toFixed(2)}
                       </span>
                     </div>
@@ -373,7 +373,7 @@ const PaymentModal = ({
                     placeholder="Enter any remarks..."
                     value={remarks}
                     onChange={(e) => setRemarks(e.target.value)}
-                    className="w-full text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#fa81a5]"
+                    className="w-full text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#15459c]"
                   />
                 </div>
 
@@ -389,7 +389,7 @@ const PaymentModal = ({
                     disabled={totalPaid < total}
                     className={`flex-1 py-2 px-4 rounded-md text-sm font-medium flex items-center justify-center gap-2 ${
                       totalPaid >= total
-                        ? "bg-gradient-to-r from-[#fa81a5] to-[#ff9a9e] text-white hover:scale-105 transition"
+                        ? " bg-[#15459c] text-white hover:scale-105 transition"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
                   >
