@@ -120,7 +120,8 @@ const PaymentModal = ({
     );
   };
 
-  const handleConfirmPayment = async () => {
+  // Now, on Confirm Payment, just validate and show the BillConfirm modal
+  const handleConfirmPayment = () => {
     if (remainingBalance > 0.01) {
       setMessage({
         text: "Remaining balance must be 0 or less (return allowed).",
@@ -142,6 +143,21 @@ const PaymentModal = ({
       return;
     }
 
+    // Save payment details for sending later after bill type selected
+    setOrderResponseData({
+      paymentDetails,
+    });
+
+    setShowBillConfirm(true);
+  };
+
+  // Now, when bill confirm is selected, send order to server with invoice_type
+  const handleBillConfirmSelect = async (invoice_type) => {
+    if (!invoice_type) {
+      setMessage({ text: "Please select an invoice type.", type: "error" });
+      return;
+    }
+
     const cart = orders.map((item) => ({
       item_code: item.itemCode,
       quantity: item.quantity,
@@ -154,48 +170,37 @@ const PaymentModal = ({
       discount_amount: discountType === "flat" ? discountAmount : 0,
       discount_percent: discountType === "percent" ? discountAmount : 0,
       redeemed_points: redeemedPoints,
-      payments: paymentDetails,
+      payments: orderResponseData.paymentDetails,
       remarks,
+      invoice_type,
     };
 
     setMessage({ text: "Sending order...", type: "info" });
 
     try {
       const data = await sendOrderToServer(payload);
-      setOrderResponseData(data);
+      setMessage({ text: "Checkout successful!", type: "success" });
 
-      if (data.status?.toLowerCase?.() === "success") {
-        setMessage({ text: "Checkout successful!", type: "success" });
-        setShowBillConfirm(true);
-        return;
+      // Open bill/print based on BillConfirm1 response if needed
+      if (data.invoice_name) {
+        const billUrl = await BillConfirm1({
+          invoice_name: data.invoice_name,
+          invoice_type,
+        });
+        window.open(billUrl, "_blank");
       }
 
-      setMessage({ text: "Invalid response from server.", type: "error" });
-    } catch (error) {
-      setMessage({ text: error.message, type: "error" });
-    }
-  };
-
-  const handleBillConfirmSelect = async (type) => {
-    if (!orderResponseData?.invoice_name) return;
-
-    const payload = {
-      invoice_name: orderResponseData.invoice_name,
-      invoice_type: type,
-    };
-
-    try {
-      const data = await BillConfirm1(payload);
-      window.open(data, "_blank");
-
+      // Reset states after success
       setCustomer({});
       setOrders([]);
       resetModalState();
       setShowPaymentMethods(false);
       setShowBillConfirm(false);
-    } catch (err) {
-      console.error("Error printing bill:", err);
-      setMessage({ text: "Failed to print bill.", type: "error" });
+    } catch (error) {
+      setMessage({
+        text: error.message || "Failed to send order.",
+        type: "error",
+      });
     }
   };
 
@@ -381,7 +386,7 @@ const PaymentModal = ({
                   <button
                     onClick={handleConfirmPayment}
                     disabled={totalPaid < total}
-                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium flex items-center justify-center gap-2 ${
+                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium flex items-center  cursor-pointer justify-center gap-2 ${
                       totalPaid >= total
                         ? "bg-[#15459c] text-white hover:scale-105 transition"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"

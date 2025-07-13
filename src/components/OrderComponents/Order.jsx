@@ -15,7 +15,6 @@ const Order = ({
   customer = {},
   redeemedPoints,
   setRedeemedPoints, // Setter from Menu
-  // --- Props from Menu.jsx for discount and type ---
   discount, // The discount amount state from Menu (renamed from discountAmount)
   setDiscount, // The setDiscountAmount setter from Menu
   discountType, // The discount type state from Menu
