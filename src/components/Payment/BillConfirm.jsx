@@ -1,4 +1,4 @@
-const BillConfirm = ({ onYes, onNo, total }) => {
+const BillConfirm = ({ onSelect, total }) => {
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-60 p-4">
       <div className="p-4 rounded-xl bg-white shadow-md border border-gray-100 max-w-sm mx-auto text-center space-y-4">
@@ -7,14 +7,14 @@ const BillConfirm = ({ onYes, onNo, total }) => {
         </h3>
         <div className="flex justify-center gap-4">
           <button
-            onClick={onYes}
+            onClick={() => onSelect("Tax Invoice")}
             className="px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg shadow"
           >
             Tax Invoice
           </button>
           {total <= 10000 && (
             <button
-              onClick={onNo}
+              onClick={() => onSelect("Abbreviated Tax Invoice")}
               className="px-4 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow"
             >
               Abbreviated Tax Invoice
@@ -25,4 +25,5 @@ const BillConfirm = ({ onYes, onNo, total }) => {
     </div>
   );
 };
+
 export default BillConfirm;

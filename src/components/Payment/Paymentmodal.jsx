@@ -24,35 +24,35 @@ const PaymentModal = ({
     {
       name: "fonePay",
       logo: "/logos/fonepay.png",
-      color: "from-[#fa81a5] to-[#ff9a9e]",
+      color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
     {
       name: "eSewa",
       logo: "/logos/esewa.png",
-      color: "from-[#fa81a5] to-[#ff9a9e]",
+      color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
     {
       name: "Khalti",
       logo: "/logos/khalti.png",
-      color: "from-[#fa81a5] to-[#ff9a9e]",
+      color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
     {
       name: "Cash",
       logo: "/logos/cash.webp",
-      color: "from-[#fa81a5] to-[#ff9a9e]",
+      color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
     {
       name: "Card",
       logo: "/logos/cash.webp",
-      color: "from-[#fa81a5] to-[#ff9a9e]",
+      color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
@@ -60,11 +60,13 @@ const PaymentModal = ({
 
   const { totalPaid, remainingBalance } = useMemo(() => {
     const paid = selectedMethods.reduce(
-      (sum, method) => sum + Number(method.amount || 0),
+      (sum, method) => sum + parseFloat(method.amount || "0"),
       0
     );
-    const remaining = total - paid;
-    return { totalPaid: paid, remainingBalance: remaining };
+    return {
+      totalPaid: paid,
+      remainingBalance: total - paid,
+    };
   }, [selectedMethods, total]);
 
   const resetModalState = () => {
@@ -85,27 +87,26 @@ const PaymentModal = ({
     if (isSelected) {
       setSelectedMethods((prev) => prev.filter((m) => m.name !== methodName));
     } else {
-      const newSelected = [
-        ...selectedMethods,
-        { ...methodInfo, amount: "0", transactionCode: "" },
-      ];
-      if (newSelected.length === 1) {
-        newSelected[0].amount = total.toFixed(2);
-      } else {
-        const totalSoFar = newSelected.reduce(
-          (sum, m) => sum + Number(m.amount || 0),
-          0
-        );
-        const remaining = total - totalSoFar;
-        newSelected[newSelected.length - 1].amount =
-          remaining > 0 ? remaining.toFixed(2) : "0";
-      }
-      setSelectedMethods(newSelected);
+      const totalSoFar = selectedMethods.reduce(
+        (sum, m) => sum + parseFloat(m.amount || "0"),
+        0
+      );
+      const remaining = total - totalSoFar;
+
+      const newMethod = {
+        ...methodInfo,
+        amount: remaining > 0 ? remaining.toFixed(2) : "0",
+        transactionCode: "",
+      };
+
+      setSelectedMethods((prev) => [...prev, newMethod]);
     }
   };
 
   const handleAmountChange = (methodName, value) => {
-    if (isNaN(value)) return;
+    const num = parseFloat(value);
+    if (isNaN(num) || num < 0) return;
+
     setSelectedMethods((prev) =>
       prev.map((m) => (m.name === methodName ? { ...m, amount: value } : m))
     );
@@ -122,17 +123,17 @@ const PaymentModal = ({
   const handleConfirmPayment = async () => {
     if (remainingBalance > 0.01) {
       setMessage({
-        text: "Remaining balance must be 0 or negative (return to customer).",
+        text: "Remaining balance must be 0 or less (return allowed).",
         type: "error",
       });
       return;
     }
 
     const paymentDetails = selectedMethods
-      .filter((m) => Number(m.amount) > 0)
+      .filter((m) => parseFloat(m.amount) > 0)
       .map((m) => ({
         mode_of_payment: m.name,
-        amount: Number(m.amount),
+        amount: parseFloat(m.amount),
         reference_no: m.transactionCode || "",
       }));
 
@@ -165,7 +166,6 @@ const PaymentModal = ({
 
       if (data.status?.toLowerCase?.() === "success") {
         setMessage({ text: "Checkout successful!", type: "success" });
-        // Show bill confirmation dialog instead of resetting immediately
         setShowBillConfirm(true);
         return;
       }
@@ -176,40 +176,27 @@ const PaymentModal = ({
     }
   };
 
-  const handleBillConfirmYes = async () => {
+  const handleBillConfirmSelect = async (type) => {
+    if (!orderResponseData?.invoice_name) return;
+
     const payload = {
       invoice_name: orderResponseData.invoice_name,
-      invoice_type: "Tax Invoice",
+      invoice_type: type,
     };
-    const data = await BillConfirm1(payload);
-    console.log(data);
-    window.open(data, "_blank");
-    // Handle bill printing logic here
-    console.log("Printing bill...");
 
-    // Reset all states after bill confirmation
-    setCustomer({});
-    setOrders([]);
-    resetModalState();
-    setShowPaymentMethods(false);
-    setShowBillConfirm(false);
-  };
+    try {
+      const data = await BillConfirm1(payload);
+      window.open(data, "_blank");
 
-  const handleBillConfirmNo = async () => {
-    // Reset all states without printing
-    const payload = {
-      invoice_name: orderResponseData.invoice_name,
-      invoice_type: "Abbreviated Tax Invoice",
-    };
-    const data = await BillConfirm1(payload);
-
-    window.open(data, "_blank");
-
-    setCustomer({});
-    setOrders([]);
-    resetModalState();
-    setShowPaymentMethods(false);
-    setShowBillConfirm(false);
+      setCustomer({});
+      setOrders([]);
+      resetModalState();
+      setShowPaymentMethods(false);
+      setShowBillConfirm(false);
+    } catch (err) {
+      console.error("Error printing bill:", err);
+      setMessage({ text: "Failed to print bill.", type: "error" });
+    }
   };
 
   return (
@@ -233,7 +220,7 @@ const PaymentModal = ({
 
           <div className="p-4 overflow-y-auto max-h-[calc(95vh-60px)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Left - Payment Methods */}
+              {/* Left Section */}
               <div className="space-y-4">
                 <div>
                   <h3 className="text-base font-semibold text-gray-800 mb-2">
@@ -255,7 +242,7 @@ const PaymentModal = ({
                           }`}
                         >
                           {isSelected && (
-                            <div className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-r bg-[#15459c] rounded-full flex items-center justify-center shadow-sm">
+                            <div className="absolute -top-2 -right-2 w-5 h-5 bg-[#15459c] rounded-full flex items-center justify-center shadow-sm">
                               <Check className="w-3 h-3 text-white" />
                             </div>
                           )}
@@ -307,7 +294,7 @@ const PaymentModal = ({
                           <div className="col-span-5">
                             <input
                               type="text"
-                              placeholder="Reference code "
+                              placeholder="Reference code"
                               value={method.transactionCode || ""}
                               onChange={(e) =>
                                 handleTransactionCodeChange(
@@ -315,7 +302,7 @@ const PaymentModal = ({
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-1.5 text-sm border border-[#15459c] rounded-md focus:outline-none focus:ring-2 focus:ring-[#15459c]]"
+                              className="w-full px-3 py-1.5 text-sm border border-[#15459c] rounded-md focus:outline-none focus:ring-2 focus:ring-[#15459c]"
                             />
                           </div>
                         </div>
@@ -325,7 +312,7 @@ const PaymentModal = ({
                 )}
               </div>
 
-              {/* Right - Summary and Remarks */}
+              {/* Right Section */}
               <div className="space-y-4">
                 <div className="bg-white border border-gray-100 rounded-lg p-4">
                   <h3 className="text-base font-semibold text-gray-800 mb-3">
@@ -340,23 +327,30 @@ const PaymentModal = ({
                     </div>
                     <div className="flex justify-between">
                       <span>Amount Paid:</span>
-                      <span className="text-[#15459c]] font-semibold">
+                      <span className="text-[#15459c] font-semibold">
                         Rs. {totalPaid.toFixed(2)}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      {remainingBalance >= 0 ? (
+                      {remainingBalance > 0.01 ? (
                         <>
                           <span>Remaining Balance:</span>
                           <span className="text-orange-600 font-semibold">
                             Rs. {remainingBalance.toFixed(2)}
                           </span>
                         </>
-                      ) : (
+                      ) : remainingBalance < -0.01 ? (
                         <>
                           <span>Return to Customer:</span>
                           <span className="text-green-600 font-semibold">
                             Rs. {Math.abs(remainingBalance).toFixed(2)}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Remaining Balance:</span>
+                          <span className="text-gray-800 font-semibold">
+                            Rs. 0.00
                           </span>
                         </>
                       )}
@@ -389,7 +383,7 @@ const PaymentModal = ({
                     disabled={totalPaid < total}
                     className={`flex-1 py-2 px-4 rounded-md text-sm font-medium flex items-center justify-center gap-2 ${
                       totalPaid >= total
-                        ? " bg-[#15459c] text-white hover:scale-105 transition"
+                        ? "bg-[#15459c] text-white hover:scale-105 transition"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
                   >
@@ -404,11 +398,7 @@ const PaymentModal = ({
       </div>
 
       {showBillConfirm && (
-        <BillConfirm
-          onYes={handleBillConfirmYes}
-          onNo={handleBillConfirmNo}
-          total={total}
-        />
+        <BillConfirm onSelect={handleBillConfirmSelect} total={total} />
       )}
     </>
   );

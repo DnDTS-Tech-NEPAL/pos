@@ -20,10 +20,12 @@ const Order = ({
   setDiscount, // The setDiscountAmount setter from Menu
   discountType, // The discount type state from Menu
   setDiscountType, // The setDiscountType setter from Menu
-  handleClearCart, // Clear cart handler from Menu
 }) => {
   // `isDiscountInputFocused` remains local
   const [isDiscountInputFocused, setIsDiscountInputFocused] = useState(false);
+  const handleClearCart = () => {
+    setOrders([]);
+  };
 
   // `sanitizeDiscount` remains local as it's used for calculations here
   const sanitizeDiscount = (value, type, subtotal) => {
@@ -34,22 +36,39 @@ const Order = ({
     }
   };
 
-  // --- ALL CALCULATIONS REMAIN LOCAL ---
-  const subtotal = orders.reduce(
-    (sum, item) => sum + item.price * (item.quantity || 0),
-    0
-  );
+  // --- Calculate subtotals separately for VAT and non-VAT items ---
+  const vatSubtotal = orders
+    .filter((item) => item.hasVat)
+    .reduce((sum, item) => sum + item.price * (item.quantity || 0), 0);
 
+  const nonVatSubtotal = orders
+    .filter((item) => !item.hasVat)
+    .reduce((sum, item) => sum + item.price * (item.quantity || 0), 0);
+
+  const subtotal = vatSubtotal + nonVatSubtotal;
+
+  // Calculate manual discount value
   const manualDiscountValue =
     discountType === "percent" ? (discount / 100) * subtotal : discount;
 
+  // Calculate redeem discount
   const redeemDiscount =
     Math.min(redeemedPoints, customer.total_points || 0) *
     (customer.conversion_factor || 0);
 
   const totalDiscount = manualDiscountValue + redeemDiscount;
+
+  // Calculate discount ratio for proportional split
+  const discountRatio = subtotal > 0 ? totalDiscount / subtotal : 0;
+
+  // Discounted VAT subtotal after applying proportional discount
+  const discountedVatSubtotal = vatSubtotal * (1 - discountRatio);
+
+  // VAT is 13% of discounted VAT subtotal only
+  const vatAmount = discountedVatSubtotal * 0.13;
+
+  // Final totals
   const afterDiscount = Math.max(subtotal - totalDiscount, 0);
-  const vatAmount = afterDiscount * 0.13;
   const finalTotal = afterDiscount + vatAmount;
 
   // Effect to update total in Menu (keep as is)

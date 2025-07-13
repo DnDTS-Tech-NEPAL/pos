@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const OrderItem = ({ order, setOrders }) => {
-  const { orderId: id, name, price, img, quantity, stock_qty } = order;
+  const { orderId: id, name, price,  quantity, stock_qty } = order;
 
   const handleQuantityChange = (type) => {
     if (type === "delete") {

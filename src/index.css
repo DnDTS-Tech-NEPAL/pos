@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 .root {
   --primary-color: blue;
   --accent-color: #ff9a9e;
