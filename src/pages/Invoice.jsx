@@ -50,7 +50,7 @@ const InvoicePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 font-inter">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="flex gap-4 mb-8 overflow-x-auto">
           <button
             onClick={() => setSelectedType("tax")}
@@ -89,13 +89,23 @@ const InvoicePage = () => {
               <table className="min-w-full text-sm text-left text-gray-700 table-fixed">
                 <thead className="bg-gray-50 text-xs uppercase text-gray-500 sticky top-0 z-10">
                   <tr>
-                    <th className="px-4 py-3 rounded-tl-lg w-[40%] min-w-[200px]">
+                    <th className="px-4 py-3 rounded-tl-lg w-[30%] min-w-[180px]">
                       Invoice Name
                     </th>
-                    <th className="px-4 py-3 w-[30%] min-w-[120px]">
-                      Grand Total (Rs.)
+                    <th className="px-4 py-3 w-[20%] min-w-[120px]">
+                      {/* Grand Total (Rs.) */}
+                      Customer Name
                     </th>
-                    <th className="px-4 py-3 rounded-tr-lg w-[30%] min-w-[160px]">
+                    <th className="px-4 py-3 w-[25%] min-w-[140px]">
+                      Phone No.
+                    </th>
+                    <th className="px-4 py-3 rounded-tr-lg w-[25%] min-w-[160px]">
+                      taxId
+                    </th>
+                    <th className="px-4 py-3 rounded-tr-lg w-[25%] min-w-[160px]">
+                      Grand Total.
+                    </th>
+                    <th className="px-4 py-3 rounded-tr-lg w-[25%] min-w-[160px]">
                       Action
                     </th>
                   </tr>
@@ -104,7 +114,7 @@ const InvoicePage = () => {
                   {paginatedInvoices.length === 0 ? (
                     <tr>
                       <td
-                        colSpan={3}
+                        colSpan={4}
                         className="px-4 py-4 text-center text-gray-500"
                       >
                         {selectedType === "tax"
@@ -118,9 +128,19 @@ const InvoicePage = () => {
                         <td className="px-4 py-4 font-medium truncate">
                           {inv.name}
                         </td>
-                        <td className="px-4 py-4">
-                          {inv.grand_total.toFixed(2)}
+                        <td className="px-4 py-4 truncate">
+                          {inv.custom_full_name || "N/A"}
                         </td>
+                        <td className="px-4 py-4 truncate">
+                          {inv.customer || "N/A"}
+                        </td>
+                        <td className="px-4 py-4 truncate">
+                          {inv.tax_id || "N/A"}
+                        </td>
+                        <td className="px-4 py-4">
+                          {inv.grand_total?.toFixed(2) || "0.00"}
+                        </td>
+
                         <td className="px-4 py-4">
                           <a
                             href={inv.invoice_url}
