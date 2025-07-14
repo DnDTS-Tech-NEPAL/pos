@@ -8,8 +8,7 @@ import MessageAlert from "../components/MessageAlert";
 import { v4 as uuidv4 } from "uuid";
 import api from "../api";
 
-const FALLBACK_IMAGE_URL =
-  "https://edumart.dndts.net/files/shiva.png";
+const FALLBACK_IMAGE_URL = "https://edumart.dndts.net/files/shiva.png";
 
 const normalize = (str) => str?.toLowerCase().replace(/[\s-]/g, "") || "";
 
@@ -80,7 +79,7 @@ const Menu = () => {
             "YOUR_FALLBACK_IMAGE_URL", // Use the correct fallback URL
           quantity: 1,
           barcode: product.barcode,
-          taxRate :product.tax_rate
+          taxRate: product.tax_rate,
         },
         ...prev,
       ];
