@@ -53,7 +53,7 @@ const Menu = () => {
   const onBarcodeMatch = (product) => {
     setOrders((prev) => {
       const existingIndex = prev.findIndex(
-        (order) => order.barcode === product.barcode
+        (order) => order.orderId === product.barcode
       );
 
       if (existingIndex >= 0) {
@@ -80,6 +80,7 @@ const Menu = () => {
             "YOUR_FALLBACK_IMAGE_URL", // Use the correct fallback URL
           quantity: 1,
           barcode: product.barcode,
+          taxRate :product.tax_rate
         },
         ...prev,
       ];
@@ -118,7 +119,7 @@ const Menu = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-xl text-gray-600 gap-4">
         <svg
-          className="animate-spin h-10 w-10 text-[#fa81a5]"
+          className="animate-spin h-10 w-10 text-[#614c9f]"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

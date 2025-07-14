@@ -10,6 +10,9 @@
 body {
   @apply lg:overflow-hidden;
 }
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px; /* thinner scrollbar */

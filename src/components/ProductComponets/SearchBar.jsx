@@ -111,7 +111,7 @@ const SearchBar = ({
       <label
         className={`flex items-center gap-3 px-3 rounded-full border transition-all duration-200 shadow-sm ${
           isFocused
-            ? "border-[#d1161b] ring-2 ring-[#ffe4ee]"
+            ? "border-[#d1161b] ring-2 ring-[#d116]"
             : "border-gray-300"
         } bg-white text-gray-700`}
       >

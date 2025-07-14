@@ -36,6 +36,7 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
         )
       );
     } else {
+      console.log(product)
       setOrders((prevOrders) => [
         {
           orderId: product.barcode|| Math.random().toString(36).substr(2, 9),
@@ -48,7 +49,7 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
           quantity: 1,
           stock_qty: product.stock_qty,
           discount: product.discount || 0,
-          hasVat : product.has_vat || true,
+          taxRate :product.tax_rate||0,
         },
         ...prevOrders,
       ]);

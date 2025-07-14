@@ -6,8 +6,8 @@ import {
   faUserTag,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useRef, useEffect } from "react";
-import { searchCustomers, createCustomer, getCustomerInvoices } from "../api"; // ✅ Updated API imports
-import InvoiceModal from "./InvoiceModal";
+import { useNavigate } from "react-router-dom"; // React Router v6
+import { searchCustomers, createCustomer } from "../api";
 
 const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
   const [customers, setCustomers] = useState([]);
@@ -20,10 +20,10 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
   const [newCustomerEmailAddress, setNewCustomerEmailAddress] = useState("");
   const [newCustomerPhoneNumber, setNewCustomerPhoneNumber] = useState("");
   const [newCustomerDOB, setNewCustomerDOB] = useState("");
-  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
-  const [invoices, setInvoices] = useState([]);
   const searchInputRef = useRef(null);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -41,7 +41,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
 
       setIsLoadingSearch(true);
       try {
-        const results = await searchCustomers(debouncedSearchTerm); // ✅ Updated
+        const results = await searchCustomers(debouncedSearchTerm);
         setCustomers(results);
       } catch (error) {
         console.error("Search error:", error);
@@ -106,7 +106,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
     };
 
     try {
-      await createCustomer(payload); // ✅ Updated
+      await createCustomer(payload);
 
       const apiNewCustomer = {
         name: payload.phone_number,
@@ -127,37 +127,27 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
       });
     }
   };
-  const customerInvoices = async () => {
-    try {
-      const data = await getCustomerInvoices(customer?.name);
-      setInvoices(data || []);
-      setShowInvoiceModal(true);
-    } catch (err) {
-      setMessage({ type: "error", text: "Could not fetch invoices" });
-      console.error(err);
-    }
+
+  // New: navigate to /invoice page with customer name as query param
+  const goToInvoicesPage = () => {
+    navigate(`/invoice`);
   };
 
   return (
     <>
-      {showInvoiceModal && (
-        <InvoiceModal
-          invoices={invoices}
-          onClose={() => setShowInvoiceModal(false)}
-        />
-      )}
-      {customer?.name && customer.name !== "Walk In Customer" ? (
-        <div className="flex gap-3">
-          <div className="flex items-center justify-between bg-[var(--primary-color)] border border-[#15459c] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#15459c] font-semibold text-sm cursor-pointer">
-            <span
-              className="truncate flex-grow text-left"
-              onClick={customerInvoices}
-            >
-              View Past Invoices
-            </span>
-          </div>
+      <div className="flex flex-col w-[25rem] sm:flex-row gap-4">
+        <div
+          className="flex items-center justify-between bg-[var(--primary-color)] border border-[#15459c] rounded-full px-4 py-2 shadow-md w-full text-[#15459c] font-medium text-sm cursor-pointer"
+          onClick={goToInvoicesPage}
+        >
+          <span className="truncate flex-grow text-left">
+            View Past Invoices
+          </span>
+        </div>
+
+        {customer?.name && customer.name !== "Walk In Customer" ? (
           <div
-            className="flex items-center justify-between bg-[var(--primary-color)] border border-[#15459c] rounded-full px-4 py-2 shadow-md w-full max-w-sm mx-auto text-[#15459c] font-semibold text-sm cursor-pointer"
+            className="flex items-center justify-between bg-[var(--primary-color)] border border-[#15459c] rounded-full px-4 py-2 shadow-md w-full text-[#15459c] font-medium text-sm cursor-pointer"
             onClick={handleOpenSearchModal}
           >
             <FontAwesomeIcon icon={faUserTag} className="mr-2 text-[#15459c]" />
@@ -169,30 +159,30 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                 e.stopPropagation();
                 setCustomer({});
               }}
-              className="ml-3 text-[#15459c] hover:text-[#15459c]"
+              className="ml-3 text-[#15459c] hover:text-red-500 transition"
               title="Clear customer"
             >
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
-        </div>
-      ) : (
-        <button
-          onClick={handleOpenSearchModal}
-          className="flex items-center justify-center bg-white border border-gray-300 rounded-full px-4 py-2 shadow-sm hover:border-[#15459c] hover:ring-2 hover:ring-[--primary-color] w-full max-w-sm mx-auto text-gray-700 text-sm font-medium"
-        >
-          <FontAwesomeIcon icon={faSearch} className="mr-2 text-gray-400" />
-          <span className="flex-grow text-center">Select Customer</span>
-          <FontAwesomeIcon
-            icon={faCirclePlus}
-            className="ml-2 text-[#15459c]"
-          />
-        </button>
-      )}
+        ) : (
+          <button
+            onClick={handleOpenSearchModal}
+            className="flex items-center justify-center bg-white border border-gray-300 rounded-full px-4 py-2 shadow-sm hover:border-[#15459c] hover:ring-2 hover:ring-[--primary-color] transition w-full text-gray-700 text-sm font-medium"
+          >
+            <FontAwesomeIcon icon={faSearch} className="mr-2 text-gray-400" />
+            <span className="flex-grow text-center">Select Customer</span>
+            <FontAwesomeIcon
+              icon={faCirclePlus}
+              className="ml-2 text-[#15459c]"
+            />
+          </button>
+        )}
+      </div>
 
       {isSearchModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm ">
-          <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto relative flex flex-col">
             <button
               onClick={handleCloseSearchModal}
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
@@ -205,7 +195,8 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                 <h3 className="text-xl font-bold text-gray-800 mb-4">
                   Search & Select Customer
                 </h3>
-                <div className="flex items-center border border-gray-300 rounded-full p-2.5 mb-4 bg-white shadow-sm focus-within:border-[#15459c] focus-within:ring-2 focus-within:ring-[--primary-color]">
+
+                <div className="flex items-center border border-gray-300 rounded-full px-3 py-2.5 mb-4 bg-white shadow-sm focus-within:border-[#15459c] focus-within:ring-2 focus-within:ring-[--primary-color]">
                   <FontAwesomeIcon
                     icon={faSearch}
                     className="text-gray-400 ml-1 mr-2"
@@ -230,7 +221,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
 
                 <button
                   onClick={handleAddClick}
-                  className="mb-4 w-full py-2.5 px-4 rounded-lg bg-[#15459c] text-white font-medium hover:bg-[#15459c] shadow-md"
+                  className="mb-4 w-full py-2.5 px-4 rounded-lg bg-[#15459c] text-white font-medium hover:bg-[#1e56c5] shadow-md transition"
                 >
                   <FontAwesomeIcon icon={faCirclePlus} className="mr-2" />
                   Add New Customer
@@ -245,7 +236,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     {customers.map((custItem) => (
                       <li
                         key={custItem.name}
-                        className="p-3.5 cursor-pointer hover:bg-[--primary-color] border-b flex items-start"
+                        className="p-3.5 cursor-pointer hover:bg-[--primary-color] hover:text-white transition border-b flex items-start"
                         onClick={() => {
                           setCustomer(custItem);
                           handleCloseSearchModal();
@@ -341,7 +332,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#15459c] text-white hover:bg-[#15459c] rounded-md"
+                    className="px-4 py-2 bg-[#15459c] text-white hover:bg-[#1e56c5] rounded-md"
                   >
                     Add Customer
                   </button>

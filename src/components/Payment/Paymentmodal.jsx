@@ -182,13 +182,8 @@ const PaymentModal = ({
       setMessage({ text: "Checkout successful!", type: "success" });
 
       // Open bill/print based on BillConfirm1 response if needed
-      if (data.invoice_name) {
-        const billUrl = await BillConfirm1({
-          invoice_name: data.invoice_name,
-          invoice_type,
-        });
-        window.open(billUrl, "_blank");
-      }
+
+      window.open(data.invoice_url, "_blank");
 
       // Reset states after success
       setCustomer({});
@@ -403,7 +398,11 @@ const PaymentModal = ({
       </div>
 
       {showBillConfirm && (
-        <BillConfirm onSelect={handleBillConfirmSelect} total={total} />
+        <BillConfirm
+          onSelect={handleBillConfirmSelect}
+          total={total}
+          onCancel={() => setShowBillConfirm(false)}
+        />
       )}
     </>
   );

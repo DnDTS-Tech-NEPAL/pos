@@ -11,22 +11,21 @@ const Order = ({
   orders,
   setOrders,
   handleSendOrder,
-  setTotal, // To update total in Menu
+  setTotal,
   customer = {},
   redeemedPoints,
-  setRedeemedPoints, // Setter from Menu
-  discount, // The discount amount state from Menu (renamed from discountAmount)
-  setDiscount, // The setDiscountAmount setter from Menu
-  discountType, // The discount type state from Menu
-  setDiscountType, // The setDiscountType setter from Menu
+  setRedeemedPoints,
+  discount,
+  setDiscount,
+  discountType,
+  setDiscountType,
 }) => {
-  // `isDiscountInputFocused` remains local
   const [isDiscountInputFocused, setIsDiscountInputFocused] = useState(false);
+
   const handleClearCart = () => {
     setOrders([]);
   };
 
-  // `sanitizeDiscount` remains local as it's used for calculations here
   const sanitizeDiscount = (value, type, subtotal) => {
     if (type === "percent") {
       return value > 100 ? 100 : value < 0 ? 0 : value;
@@ -35,78 +34,70 @@ const Order = ({
     }
   };
 
-  // --- Calculate subtotals separately for VAT and non-VAT items ---
-  const vatSubtotal = orders
-    .filter((item) => item.hasVat)
-    .reduce((sum, item) => sum + item.price * (item.quantity || 0), 0);
+  // --- Calculate totals with taxRate ---
+  const subtotal = orders.reduce(
+    (sum, item) => sum + item.price * (item.quantity || 0),
+    0
+  );
 
-  const nonVatSubtotal = orders
-    .filter((item) => !item.hasVat)
-    .reduce((sum, item) => sum + item.price * (item.quantity || 0), 0);
-
-  const subtotal = vatSubtotal + nonVatSubtotal;
-
-  // Calculate manual discount value
   const manualDiscountValue =
     discountType === "percent" ? (discount / 100) * subtotal : discount;
 
-  // Calculate redeem discount
   const redeemDiscount =
     Math.min(redeemedPoints, customer.total_points || 0) *
     (customer.conversion_factor || 0);
 
   const totalDiscount = manualDiscountValue + redeemDiscount;
 
-  // Calculate discount ratio for proportional split
   const discountRatio = subtotal > 0 ? totalDiscount / subtotal : 0;
 
-  // Discounted VAT subtotal after applying proportional discount
-  const discountedVatSubtotal = vatSubtotal * (1 - discountRatio);
+  let vatAmount = 0;
+  let afterDiscount = 0;
 
-  // VAT is 13% of discounted VAT subtotal only
-  const vatAmount = discountedVatSubtotal * 0.13;
+  orders.forEach((item) => {
+    const qty = item.quantity || 0;
+    const itemSubtotal = item.price * qty;
+    const discountedSubtotal = itemSubtotal * (1 - discountRatio);
+    const itemVat =
+      (item.taxRate || 0) > 0 ? (discountedSubtotal * item.taxRate) / 100 : 0;
 
-  // Final totals
-  const afterDiscount = Math.max(subtotal - totalDiscount, 0);
+    vatAmount += itemVat;
+    afterDiscount += discountedSubtotal;
+  });
+
   const finalTotal = afterDiscount + vatAmount;
 
-  // Effect to update total in Menu (keep as is)
   useEffect(() => {
     setTotal(parseFloat(finalTotal.toFixed(2)));
   }, [finalTotal, setTotal]);
 
-  // Effect to re-sanitize discount when type or subtotal changes (apply to the prop setter)
   useEffect(() => {
-    // When discountType or subtotal changes, re-sanitize the current 'discount' value
-    // This calls the setDiscountAmount setter from Menu.jsx
     setDiscount((currentDiscount) =>
       sanitizeDiscount(currentDiscount, discountType, subtotal)
     );
-  }, [discountType, subtotal, setDiscount]); // setDiscount is now a prop (setDiscountAmount)
+  }, [discountType, subtotal, setDiscount]);
 
-  // Handlers now use the setters passed as props
   const handleDiscountChange = (e) => {
     const cleaned = e.target.value.replace(/[^\d.]/g, "");
     const dotCount = (cleaned.match(/\./g) || []).length;
     if (dotCount > 1) return;
 
     const val = parseFloat(cleaned) || 0;
-    setDiscount(sanitizeDiscount(val, discountType, subtotal)); // Use prop setter (setDiscountAmount)
+    setDiscount(sanitizeDiscount(val, discountType, subtotal));
   };
 
   const handleDiscountTypeChange = (type) => {
-    setDiscountType(type); // Use prop setter (setDiscountType)
+    setDiscountType(type);
     setDiscount((currentDiscount) =>
       sanitizeDiscount(currentDiscount, type, subtotal)
-    ); // Use prop setter (setDiscountAmount)
+    );
   };
 
   const handleRedeemedPointsChange = (e) => {
     const val = parseInt(e.target.value.replace(/\D/g, ""), 10);
-    // Ensure points don't exceed available points
     setRedeemedPoints(
       isNaN(val) ? 0 : Math.min(val, customer.total_points || 0)
-    ); // Use prop setter (setRedeemedPoints)
+    );
   };
 
   return (
@@ -170,17 +161,20 @@ const Order = ({
                 </div>
                 <div className="relative flex-1">
                   <input
-                    type="text"
-                    value={discount} // Use the prop value
-                    onChange={handleDiscountChange} // Use the prop handler
+                    type="number"
+                    value={discount}
+                    onChange={handleDiscountChange}
                     onFocus={() => setIsDiscountInputFocused(true)}
                     onBlur={() => setIsDiscountInputFocused(false)}
                     placeholder="Add discount"
-                    className={`w-full text-sm border border-[#d1161b] rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 ${
-                      isDiscountInputFocused
-                        ? "focus:ring-[#d1161b] focus:border-[#d1161b]"
-                        : "focus:ring-gray-300 focus:border-gray-300"
-                    }`}
+                    className={`w-full text-sm border border-[#d1161b] rounded-lg px-3 py-1.5 pr-8    [&::-webkit-outer-spin-button]:appearance-none 
+                                                  [&::-webkit-outer-spin-button]:m-0 
+                                                  [&::-webkit-inner-spin-button]:appearance-none 
+                                                    [&::-webkit-inner-spin-button]:m-0focus:outline-none focus:ring-1 ${
+                                                      isDiscountInputFocused
+                                                        ? "focus:ring-[#d1161b] focus:border-[#d1161b]"
+                                                        : "focus:ring-gray-300 focus:border-gray-300"
+                                                    }`}
                   />
                   <FontAwesomeIcon
                     icon={discountType === "flat" ? faRupee : faPercent}
@@ -196,27 +190,18 @@ const Order = ({
                 </label>
                 <input
                   type="text"
-                  value={redeemedPoints} // Use the prop value
-                  onChange={handleRedeemedPointsChange} // Use the prop handler
+                  value={redeemedPoints}
+                  onChange={handleRedeemedPointsChange}
                   placeholder={`Max: ${customer.total_points || 0}`}
                   className="w-full text-sm  border border-[#d1161b] rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-1 focus:ring-[#d1161b] focus:border-[#d1161b]"
                 />
               </div>
             </div>
-            {/* Display total discount */}
-            {totalDiscount > 0 && (
-              <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
-                <span>Total Discount Applied</span>
-                <span className="text-[#d1161b]">
-                  - Rs. {totalDiscount.toFixed(2)}
-                </span>
-              </div>
-            )}
           </div>
 
           {/* VAT & Total */}
           <div className="flex justify-between items-center font-semibold border-t border-gray-100 pt-2">
-            <span className="font-bold">VAT (13%)</span>
+            <span className="font-bold">VAT</span>
             <span className="text-[#d1161b]">Rs. {vatAmount.toFixed(2)}</span>
           </div>
 
@@ -225,17 +210,16 @@ const Order = ({
             <span className="text-[#d1161b]">Rs. {finalTotal.toFixed(2)}</span>
           </div>
 
-          {/* Buttons */}
           <div className="grid grid-cols-2 gap-2 pt-2">
             <button
-              onClick={handleClearCart} // Use the prop handler
+              onClick={handleClearCart}
               className="w-full px-3 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer font-medium text-sm"
             >
               Clear Cart
             </button>
             <button
               onClick={handleSendOrder}
-              className="w-full px-3 py-2 bg-[#15459c] hover:bg-[] text-white font-medium rounded-lg cursor-pointer transition-colors text-sm"
+              className="w-full px-3 py-2 bg-[#15459c] text-white font-medium rounded-lg cursor-pointer transition-colors text-sm"
             >
               Pay Now
             </button>
