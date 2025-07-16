@@ -341,7 +341,7 @@ const InvoicePage = () => {
 
       {/* Cancel Popup Modal */}
       {showCancelPopup && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4">
+        <div className="fixed inset-0 z-50 bg-black/50 bg-opacity-50 flex items-center justify-center px-4">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 space-y-4">
             <h2 className="text-lg font-semibold text-gray-800">
               Cancel Invoice
@@ -365,12 +365,12 @@ const InvoicePage = () => {
                   setCancelRemark("");
                   setSelectedInvoiceToCancel(null);
                 }}
-                disabled={!cancelRemark.trim()}
                 className="px-4 py-2 text-sm rounded bg-gray-200 hover:bg-gray-300"
               >
                 Cancel
               </button>
               <button
+                disabled={!cancelRemark.trim()}
                 onClick={async () => {
                   try {
                     const data = await CancelInvoice({
