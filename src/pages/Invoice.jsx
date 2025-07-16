@@ -1,6 +1,7 @@
+"use client";
 import { useState, useEffect, useRef, useMemo } from "react";
-// Assuming getCustomerInvoices is defined elsewhere or mocked for this example
-import { getCustomerInvoices } from "../api";
+import { getCustomerInvoices, CancelInvoice } from "../api";
+import MessageAlert from "../components/MessageAlert";
 
 const FALLBACK_IMAGE_URL = "https://edumart.dndts.net/files/shiva.png";
 
@@ -12,25 +13,31 @@ const InvoicePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(7);
   const [invoiceQuery, setInvoiceQuery] = useState("");
+  const [message, setMessage] = useState({ text: "", type: "" });
+
+  const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const [cancelRemark, setCancelRemark] = useState("");
+  const [selectedInvoiceToCancel, setSelectedInvoiceToCancel] = useState(null);
+
   const containerRef = useRef(null);
 
-  useEffect(() => {
-    const fetchInvoices = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await getCustomerInvoices();
-        setInvoices(data || []);
-      } catch (err) {
-        setError("Failed to load invoices.");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchInvoices = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getCustomerInvoices();
+      setInvoices(data || []);
+    } catch (err) {
+      setError("Failed to load invoices.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchInvoices();
-  }, []);
+  }, [showCancelPopup]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -43,7 +50,6 @@ const InvoicePage = () => {
       const containerHeight = containerRef.current.clientHeight;
       const headerHeight = 40;
       const approxRowHeight = 48;
-
       const availableHeight = containerHeight - headerHeight;
       let rowsThatFit = Math.floor(availableHeight / approxRowHeight);
       const clampedRows = Math.min(Math.max(rowsThatFit, 5), 25);
@@ -95,13 +101,16 @@ const InvoicePage = () => {
 
   const clearSearch = () => setInvoiceQuery("");
 
-  const handleCancelInvoice = (invoiceName) => {
-    alert(`Cancel clicked for ${invoiceName}`);
-  };
+  useEffect(() => {
+    if (!message.text) return;
+    const timeout = setTimeout(() => setMessage({ text: "", type: "" }), 3000);
+    return () => clearTimeout(timeout);
+  }, [message]);
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      {/* Header */}
+      <MessageAlert message={message} />
+
       <div className="sticky top-0 z-50 bg-white shadow px-4 py-3 border-b border-gray-200 shrink-0">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center justify-between max-w-7xl mx-auto">
           <a
@@ -125,21 +134,30 @@ const InvoicePage = () => {
             {invoiceQuery && (
               <button
                 onClick={clearSearch}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
-                aria-label="Clear search"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
-                  viewBox="0 0 24 24"
                   fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  viewBox="0 0 24 24"
                 >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
+                  <line
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <line
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
                 </svg>
               </button>
             )}
@@ -147,10 +165,8 @@ const InvoicePage = () => {
         </div>
       </div>
 
-      {/* Main Content Area */}
       <div className="flex flex-col flex-grow bg-gray-50 py-8 px-4 font-sans overflow-y-auto">
         <div className="max-w-7xl mx-auto w-full flex flex-col h-full space-y-6">
-          {/* Invoice Type Filters */}
           <div className="flex gap-3 flex-wrap shrink-0">
             <button
               onClick={() => setSelectedType("tax")}
@@ -174,7 +190,6 @@ const InvoicePage = () => {
             </button>
           </div>
 
-          {/* Loading, Error, and Empty States */}
           {loading ? (
             <div className="flex-grow flex items-center justify-center">
               <p className="text-gray-500 text-sm">Loading invoices...</p>
@@ -189,7 +204,6 @@ const InvoicePage = () => {
             </div>
           ) : (
             <>
-              {/* Invoice Table */}
               <div
                 ref={containerRef}
                 className="rounded-xl border border-gray-200 shadow-sm overflow-y-auto flex-grow min-h-0"
@@ -247,15 +261,12 @@ const InvoicePage = () => {
                                   >
                                     View Invoice
                                   </a>
-
                                   <button
-                                    onClick={() =>
-                                      handleCancelInvoice(inv.name)
-                                    }
-                                    aria-label={`Cancel invoice ${inv.name}`}
-                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-md transition"
-                                    type="button"
-                                    title="Cancel Invoice"
+                                    onClick={() => {
+                                      setSelectedInvoiceToCancel(inv.name);
+                                      setShowCancelPopup(true);
+                                    }}
+                                    className="flex items-center justify-center w-10 h-10 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-md"
                                   >
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
@@ -275,11 +286,8 @@ const InvoicePage = () => {
                                 </>
                               ) : (
                                 <button
-                                  aria-label={`Cancelled invoice ${inv.name}`}
-                                  className="w-28 py-2 rounded-md bg-gray-300 text-gray-600 cursor-not-allowed select-none"
-                                  type="button"
+                                  className="w-28 py-2 rounded-md bg-red-600 text-gray-50 cursor-not-allowed"
                                   disabled
-                                  title="Cancelled Invoice"
                                 >
                                   Cancelled
                                 </button>
@@ -293,7 +301,6 @@ const InvoicePage = () => {
                 </table>
               </div>
 
-              {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-center mt-6 gap-2 bg-white flex-wrap text-sm shrink-0">
                   <button
@@ -331,6 +338,75 @@ const InvoicePage = () => {
           )}
         </div>
       </div>
+
+      {/* Cancel Popup Modal */}
+      {showCancelPopup && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 space-y-4">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Cancel Invoice
+            </h2>
+            <p className="text-sm text-gray-600">
+              Are you sure you want to cancel invoice{" "}
+              <strong>{selectedInvoiceToCancel}</strong>?
+            </p>
+            <textarea
+              placeholder="Enter cancellation remark..."
+              value={cancelRemark}
+              onChange={(e) => setCancelRemark(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              rows={3}
+              required
+            />
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => {
+                  setShowCancelPopup(false);
+                  setCancelRemark("");
+                  setSelectedInvoiceToCancel(null);
+                }}
+                disabled={!cancelRemark.trim()}
+                className="px-4 py-2 text-sm rounded bg-gray-200 hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    const data = await CancelInvoice({
+                      invoice_name: selectedInvoiceToCancel,
+                      remarks: cancelRemark,
+                    });
+
+                    if (data.status === "success") {
+                      setMessage({ text: data.message, type: "success" });
+                      await fetchInvoices();
+                    } else {
+                      console.log(data.status);
+                      setMessage({
+                        text: "Cancellation failed.",
+                        type: "error",
+                      });
+                    }
+                  } catch {
+                    setMessage({
+                      text: "Failed to cancel invoice.",
+                      type: "error",
+                    });
+                  } finally {
+                    setShowCancelPopup(false);
+                    setCancelRemark("");
+                    setSelectedInvoiceToCancel(null);
+                  }
+                }}
+                className="px-4 py-2 text-sm rounded bg-red-600 hover:bg-red-700 text-white"
+              >
+                Confirm Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

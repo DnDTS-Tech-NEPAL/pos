@@ -18,8 +18,8 @@ const api = {
     return response.data.message || [];
   },
   getCustomerInvoices: async (payload) => {
-    const response = await axios.post(`${API_BASE}/invoice_list`,{
-      customer: payload
+    const response = await axios.post(`${API_BASE}/invoice_list`, {
+      customer: payload,
     });
     return response.data.data || [];
   },
@@ -59,8 +59,20 @@ const api = {
   BillConfirm1: async (payload) => {
     try {
       const response = await axios.post(`${API_BASE}/invoice_print`, payload);
-      console.log("this",response)
+      console.log("this", response);
       return response?.data.message;
+    } catch (error) {
+      console.error("Order send error", error);
+      throw new Error(
+        error?.response?.data?.error || "Failed to process payment."
+      );
+    }
+  },
+  CancelInvoice: async (payload) => {
+    try {
+      const response = await axios.post(`${API_BASE}/cancel_invoice`, payload);
+
+      return response?.data;
     } catch (error) {
       console.error("Order send error", error);
       throw new Error(
@@ -79,5 +91,6 @@ export const {
   createCustomer,
   sendOrderToServer,
   BillConfirm1,
-  getCustomerInvoices
+  getCustomerInvoices,
+  CancelInvoice,
 } = api;
