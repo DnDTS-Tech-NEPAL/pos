@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const OrderItem = ({ order, setOrders }) => {
-  const { orderId: id, name, price,  quantity, stock_qty } = order;
+  const { orderId: id, name, price, quantity, stock_qty } = order;
 
   const handleQuantityChange = (type) => {
     if (type === "delete") {
@@ -37,19 +37,30 @@ const OrderItem = ({ order, setOrders }) => {
     }
   };
 
+  const handlePriceChange = (e) => {
+    const newPrice = parseFloat(e.target.value);
+    if (isNaN(newPrice) || newPrice < 0) return;
+
+    setOrders((prevOrders) =>
+      prevOrders.map((item) =>
+        item.orderId === id ? { ...item, price: newPrice } : item
+      )
+    );
+  };
+
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-2 border border-gray-200 rounded-xl shadow bg-white transition-all duration-200">
       {/* Image */}
       <img
         src="https://edumart.dndts.net/files/shiva.png"
         alt={name}
-        className="w-14 h-14 sm:w-12 sm:h-12 object-cover rounded-md "
+        className="w-14 h-14 sm:w-12 sm:h-12 object-cover rounded-md"
       />
 
       {/* Content */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between flex-1 w-full gap-2 sm:gap-4">
         <div className="flex flex-col sm:flex-1">
-          <div className="flex gap-4 ">
+          <div className="flex gap-4">
             <h3 className="font-medium text-sm text-gray-800">{name}</h3>
             <div className="text-sm font-semibold text-green-600">
               {order.discount > 0 ? `${order.discount}% off` : ""}
@@ -74,9 +85,22 @@ const OrderItem = ({ order, setOrders }) => {
             >
               <FontAwesomeIcon icon={faCirclePlus} />
             </button>
-            <div className="text-sm font-semibold mx-3 text-gray-700">
-              Rs. {price.toFixed(2)}
-            </div>
+
+            {/* ✅ Editable price input */}
+
+            <input
+              type="number"
+              inputMode="decimal"
+              pattern="[0-9]*"
+              value={price}
+              onChange={handlePriceChange}
+              onWheel={(e) => e.currentTarget.blur()} // Prevent trackpad/scroll wheel change
+              className="ml-3 w-[80px] text-sm font-semibold border border-gray-300 rounded px-2 py-1 text-gray-700 appearance-none     [&::-webkit-outer-spin-button]:m-0 
+                                                  [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none"
+              min="0"
+              step="0.01"
+              title="Edit price"
+            />
           </div>
         </div>
 

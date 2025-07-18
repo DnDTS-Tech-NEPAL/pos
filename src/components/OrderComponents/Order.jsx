@@ -34,7 +34,6 @@ const Order = ({
     }
   };
 
-  // --- Calculate totals with taxRate ---
   const subtotal = orders.reduce(
     (sum, item) => sum + item.price * (item.quantity || 0),
     0
@@ -51,21 +50,16 @@ const Order = ({
 
   const discountRatio = subtotal > 0 ? totalDiscount / subtotal : 0;
 
-  let vatAmount = 0;
   let afterDiscount = 0;
 
   orders.forEach((item) => {
     const qty = item.quantity || 0;
     const itemSubtotal = item.price * qty;
     const discountedSubtotal = itemSubtotal * (1 - discountRatio);
-    const itemVat =
-      (item.taxRate || 0) > 0 ? (discountedSubtotal * item.taxRate) / 100 : 0;
-
-    vatAmount += itemVat;
     afterDiscount += discountedSubtotal;
   });
 
-  const finalTotal = afterDiscount + vatAmount;
+  const finalTotal = afterDiscount;
 
   useEffect(() => {
     setTotal(parseFloat(finalTotal.toFixed(2)));
@@ -102,7 +96,7 @@ const Order = ({
 
   return (
     <div className="flex flex-col min-h-full h-90vh">
-      <div className="flex-1 overflow-y-auto p-4 max-h-[50vh]">
+      <div className="flex-1 overflow-y-auto p-4 max-h-[55vh]">
         <div className="space-y-3 overflow-auto">
           {orders.map((order) => (
             <OrderItem
@@ -199,12 +193,7 @@ const Order = ({
             </div>
           </div>
 
-          {/* VAT & Total */}
-          <div className="flex justify-between items-center font-semibold border-t border-gray-100 pt-2">
-            <span className="font-bold">VAT</span>
-            <span className="text-[#d1161b]">Rs. {vatAmount.toFixed(2)}</span>
-          </div>
-
+          {/* Total */}
           <div className="flex justify-between items-center font-semibold border-t border-gray-100 pt-2">
             <span className="font-bold">Total</span>
             <span className="text-[#d1161b]">Rs. {finalTotal.toFixed(2)}</span>
