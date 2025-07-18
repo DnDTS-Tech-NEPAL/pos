@@ -30,7 +30,7 @@ const PaymentModal = ({
     },
     {
       name: "Credit Card",
-      logo: "/logos/creditcard.png", // Make sure you have this logo
+      logo: "/logos/creditcard.jpeg", // Make sure you have this logo
       color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
@@ -44,21 +44,21 @@ const PaymentModal = ({
     },
     {
       name: "NepalPay",
-      logo: "/logos/nepalpay.png", // Add this image
+      logo: "/logos/Nepalpay.png", // Add this image
       color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
     {
       name: "IPS",
-      logo: "/logos/ips.png", // Add this image
+      logo: "/logos/connectIps.png", // Add this image
       color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
     {
       name: "Daraz",
-      logo: "/logos/daraz.png",
+      logo: "/logos/daraz.jpeg",
       color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
@@ -86,7 +86,7 @@ const PaymentModal = ({
     },
     {
       name: "Bank",
-      logo: "/logos/bank.png", // Add this image
+      logo: "/logos/Bank.png", // Add this image
       color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
