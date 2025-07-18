@@ -56,6 +56,27 @@ const PaymentModal = ({
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
+    {
+      name: "Cheque",
+      logo: "/logos/cash.webp",
+      color: "",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
+    },
+    {
+      name: "Pathoo Parcel",
+      logo: "/logos/pathoo.png",
+      color: "",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
+    },
+    {
+      name: "daraz",
+      logo: "/logos/daraz.png",
+      color: "",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
+    },
   ];
 
   const { totalPaid, remainingBalance } = useMemo(() => {
