@@ -90,13 +90,13 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
       return;
     }
 
-    if (
-      newCustomerEmailAddress.trim() &&
-      !/\S+@\S+\.\S+/.test(newCustomerEmailAddress.trim())
-    ) {
-      setMessage({ type: "error", text: "Invalid email format." });
-      return;
-    }
+    // if (
+    //   newCustomerEmailAddress.trim() &&
+    //   !/\S+@\S+\.\S+/.test(newCustomerEmailAddress.trim())
+    // ) {
+    //   setMessage({ type: "error", text: "Invalid email format." });
+    //   return;
+    // }
 
     const payload = {
       dob: newCustomerDOB.trim(),
@@ -303,7 +303,7 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
                     Address (Optional)
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     value={newCustomerEmailAddress}
                     onChange={(e) => setNewCustomerEmailAddress(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#15459c] focus:border-[#15459c]"
