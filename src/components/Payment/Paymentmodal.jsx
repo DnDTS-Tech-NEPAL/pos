@@ -22,8 +22,50 @@ const PaymentModal = ({
 
   const allPaymentMethods = [
     {
-      name: "fonePay",
+      name: "Cash",
+      logo: "/logos/cash.webp",
+      color: "",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
+    },
+    {
+      name: "Credit Card",
+      logo: "/logos/creditcard.png", // Make sure you have this logo
+      color: "",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
+    },
+    {
+      name: "FonePay",
       logo: "/logos/fonepay.png",
+      color: "",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
+    },
+    {
+      name: "NepalPay",
+      logo: "/logos/nepalpay.png", // Add this image
+      color: "",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
+    },
+    {
+      name: "IPS",
+      logo: "/logos/ips.png", // Add this image
+      color: "",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
+    },
+    {
+      name: "Daraz",
+      logo: "/logos/daraz.png",
+      color: "",
+      bgColor: "bg-blue-50",
+      borderColor: "border-blue-300",
+    },
+    {
+      name: "Pathao Parcel",
+      logo: "/logos/pathoo.png",
       color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
@@ -43,15 +85,8 @@ const PaymentModal = ({
       borderColor: "border-blue-300",
     },
     {
-      name: "Cash",
-      logo: "/logos/cash.webp",
-      color: "",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-300",
-    },
-    {
-      name: "Card",
-      logo: "/logos/cash.webp",
+      name: "Bank",
+      logo: "/logos/bank.png", // Add this image
       color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
@@ -59,20 +94,6 @@ const PaymentModal = ({
     {
       name: "Cheque",
       logo: "/logos/cash.webp",
-      color: "",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-300",
-    },
-    {
-      name: "Pathoo Parcel",
-      logo: "/logos/pathoo.png",
-      color: "",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-300",
-    },
-    {
-      name: "daraz",
-      logo: "/logos/daraz.png",
       color: "",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
@@ -223,7 +244,7 @@ const PaymentModal = ({
   return (
     <>
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl w-full max-w-5xl mx-auto max-h-[95vh] overflow-hidden shadow-2xl">
+        <div className="bg-white rounded-2xl w-full max-w-6xl mx-auto max-h-[95vh] overflow-hidden shadow-2xl">
           <div className=" bg-[#15459c] px-4 py-3 text-white relative">
             <div className="relative flex justify-between items-center">
               <div>
@@ -247,7 +268,7 @@ const PaymentModal = ({
                   <h3 className="text-base font-semibold text-gray-800 mb-2">
                     Payment Methods
                   </h3>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-3 gap-3">
                     {allPaymentMethods.map((method) => {
                       const isSelected = selectedMethods.some(
                         (m) => m.name === method.name

@@ -11,6 +11,8 @@ body {
   @apply lg:overflow-hidden;
 }
 input[type="number"] {
+  -webkit-appearance: none;
+  margin: 0;
   -moz-appearance: textfield;
 }
 
