@@ -217,7 +217,7 @@ const PaymentModal = ({
       payments: orderResponseData.paymentDetails,
       remarks,
       order_no: orderNo,
-      order_type: orderType,
+      order_source: orderType,
       invoice_type,
     };
 
