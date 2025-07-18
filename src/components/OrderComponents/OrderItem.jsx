@@ -95,8 +95,8 @@ const OrderItem = ({ order, setOrders }) => {
               value={price}
               onChange={handlePriceChange}
               onWheel={(e) => e.currentTarget.blur()} // Prevent trackpad/scroll wheel change
-              className="ml-3 w-[80px] text-sm font-semibold border border-gray-300 rounded px-2 py-1 text-gray-700 appearance-none     [&::-webkit-outer-spin-button]:m-0 
-                                                  [&::-webkit-inner-spin-button]:appearance-none  focus:outline-none"
+              className="ml-3 w-[80px] text-sm font-semibold border border-gray-300 rounded px-2 py-1 text- focus:outgray-700 appearance-none     [&::-webkit-outer-spin-button]:m-0 
+                                                  [&::-webkit-inner-spin-button]:appearance-none line-none"
               min="0"
               step="0.01"
               title="Edit price"

@@ -330,7 +330,8 @@ const PaymentModal = ({
                               onChange={(e) =>
                                 handleAmountChange(method.name, e.target.value)
                               }
-                              className="w-full pl-10 pr-2 py-1.5 text-sm border border-[#15459c] rounded-md focus:outline-none focus:ring-2 focus:ring-[#15459c]"
+                              onWheel={(e) => e.currentTarget.blur()}
+                              className="w-full pl-10 pr-2 py-1.5 text-sm border border-[#15459c] rounded-md focus:outline-none focus:ring-2   [&::-webkit-outer-spin-button]:m-0    [&::-webkit-inner-spin-button]:appearance-none focus:ring-[#15459c]"
                             />
                           </div>
                           <div className="col-span-5">
