@@ -52,7 +52,7 @@ const PaymentModal = ({
       borderColor: "border-blue-300",
     },
     {
-      name: "IPS",
+      name: "CIPS",
       logo: "/logos/connectIps.png", // Add this image
       color: "",
       bgColor: "bg-blue-50",
@@ -79,13 +79,7 @@ const PaymentModal = ({
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
-    {
-      name: "Khalti",
-      logo: "/logos/khalti.png",
-      color: "",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-300",
-    },
+
     {
       name: "Bank",
       logo: "/logos/Bank.png", // Add this image
