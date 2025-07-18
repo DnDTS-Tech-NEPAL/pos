@@ -38,8 +38,8 @@ const OrderItem = ({ order, setOrders }) => {
   };
 
   const handlePriceChange = (e) => {
-    const newPrice = parseFloat(e.target.value);
-    if (isNaN(newPrice) || newPrice < 0) return;
+    let newPrice = parseFloat(e.target.value);
+    if (isNaN(newPrice) || newPrice < 0) newPrice = 0;
 
     setOrders((prevOrders) =>
       prevOrders.map((item) =>
