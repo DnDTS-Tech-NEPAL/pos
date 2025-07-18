@@ -19,6 +19,8 @@ const PaymentModal = ({
   const [remarks, setRemarks] = useState("");
   const [showBillConfirm, setShowBillConfirm] = useState(false);
   const [orderResponseData, setOrderResponseData] = useState(null);
+  const [orderNo, setOrderNo] = useState("");
+  const [orderType, setOrderType] = useState("");
 
   const allPaymentMethods = [
     {
@@ -214,6 +216,8 @@ const PaymentModal = ({
       redeemed_points: redeemedPoints,
       payments: orderResponseData.paymentDetails,
       remarks,
+      order_no: orderNo,
+      order_type: orderType,
       invoice_type,
     };
 
@@ -401,17 +405,51 @@ const PaymentModal = ({
                   </div>
                 </div>
 
-                <div>
-                  <label className="text-sm text-gray-700 font-medium block mb-1">
-                    Remarks (optional)
-                  </label>
-                  <textarea
-                    rows={2}
-                    placeholder="Enter any remarks..."
-                    value={remarks}
-                    onChange={(e) => setRemarks(e.target.value)}
-                    className="w-full text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#15459c]"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm text-gray-700 font-medium block mb-1">
+                      Order No (optional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter order number"
+                      value={orderNo}
+                      onChange={(e) => setOrderNo(e.target.value)}
+                      className="w-full text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#15459c]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-gray-700 font-medium block mb-1">
+                      Order Type
+                    </label>
+                    <select
+                      value={orderType}
+                      onChange={(e) => setOrderType(e.target.value)}
+                      className="w-full text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#15459c]"
+                    >
+                      <option value="">Select order type</option>
+                      <option value="Daraz">Daraz</option>
+                      <option value="Store">Store</option>
+                      <option value="Meta">Meta</option>
+                      <option value="Wholesale">Wholesale</option>
+                      <option value="Self">Self</option>
+                      <option value="Online">Online</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-gray-700 font-medium block mb-1">
+                      Remarks (optional)
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="Enter any remarks..."
+                      value={remarks}
+                      onChange={(e) => setRemarks(e.target.value)}
+                      className="w-full text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#15459c]"
+                    />
+                  </div>
                 </div>
 
                 <div className="flex gap-2 pt-2">
