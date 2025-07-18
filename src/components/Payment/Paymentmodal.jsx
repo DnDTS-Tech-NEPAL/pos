@@ -72,13 +72,6 @@ const PaymentModal = ({
       bgColor: "bg-blue-50",
       borderColor: "border-blue-300",
     },
-    {
-      name: "eSewa",
-      logo: "/logos/esewa.png",
-      color: "",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-300",
-    },
 
     {
       name: "Bank",
