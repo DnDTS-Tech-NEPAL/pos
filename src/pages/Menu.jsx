@@ -5,6 +5,8 @@ import SearchBar from "../components/ProductComponets/SearchBar";
 import CustomerSearch from "../components/Customer";
 import PaymentModal from "../components/Payment/Paymentmodal";
 import MessageAlert from "../components/MessageAlert";
+import { User } from "lucide-react"; // Add this at the top (optional icon library)
+
 import { v4 as uuidv4 } from "uuid";
 import api from "../api";
 
@@ -24,6 +26,8 @@ const Menu = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [discountType, setDiscountType] = useState("flat");
+  // Inside your Menu component, add:
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const handleLogout = async () => {
     await api.logout();
     window.location.href = "/login"; // Redirect after logout
@@ -184,12 +188,6 @@ const Menu = () => {
               className="w-full"
             />
           </div>
-          <button
-            onClick={handleLogout}
-            className="bg-[#C51118] cursor-pointer text-white px-4 py-2 rounded-xl hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
 
           <div className="w-full lg:w-auto">
             <CustomerSearch
@@ -198,6 +196,27 @@ const Menu = () => {
               className="w-full"
               setMessage={setMessage}
             />
+          </div>
+
+          <div className="relative inline-block text-left">
+            <button
+              onClick={() => setShowUserMenu((prev) => !prev)}
+              className="bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition"
+              title="User Menu"
+            >
+              <User className="h-6 w-6 text-gray-700" />
+            </button>
+
+            {showUserMenu && (
+              <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

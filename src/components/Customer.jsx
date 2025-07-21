@@ -137,12 +137,10 @@ const CustomerSearch = ({ customer, setCustomer, setMessage }) => {
     <>
       <div className="flex flex-col w-[25rem] sm:flex-row gap-4">
         <div
-          className="flex items-center justify-between bg-[var(--primary-color)] border border-[#15459c] rounded-full px-4 py-2 shadow-md w-full text-[#15459c] font-medium text-sm cursor-pointer"
+          className="flex items-center justify-between bg-[var(--primary-color)] border border-[#15459c] rounded-full px-4 py-2 shadow-md w-2/3 text-[#15459c] font-medium text-sm cursor-pointer"
           onClick={goToInvoicesPage}
         >
-          <span className="truncate flex-grow text-left">
-            View Past Invoices
-          </span>
+          <span className=" text-left">View Past Invoices</span>
         </div>
 
         {customer?.name && customer.name !== "Walk In Customer" ? (
