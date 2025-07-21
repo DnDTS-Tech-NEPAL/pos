@@ -194,8 +194,8 @@ const Menu = () => {
 
       {/* Main Layout */}
       <div className="flex-1 px-2 md:px-4 py-2 overflow-hidden">
-        <div className="grid lg:grid-cols-2 gap-4 h-screen">
-          <div className="lg:col-span-1 overflow-y-auto">
+        <div className="grid lg:grid-cols-2  h-screen">
+          <div className=" overflow-y-auto">
             <Product
               products={filteredProducts}
               orders={orders}
@@ -203,7 +203,7 @@ const Menu = () => {
               setMessage={setMessage}
             />
           </div>
-          <div className="lg:col-span-1 border-t lg:border-t-0  border-gray-200 pt-4 lg:pt-6 lg:pl-4 overflow-y-auto">
+          <div className="lg:col-span-1 border-t lg:border-t-0  border-gray-200 pt-4 lg:pt-6  overflow-y-auto">
             <Order
               orders={orders}
               setOrders={setOrders}

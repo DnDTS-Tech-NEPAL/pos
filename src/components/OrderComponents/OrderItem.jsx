@@ -47,12 +47,13 @@ const OrderItem = ({ order, setOrders }) => {
       )
     );
   };
+  console.log(order)
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-2 border border-gray-200 rounded-xl shadow bg-white transition-all duration-200">
       {/* Image */}
       <img
-        src="https://edumart.dndts.net/files/shiva.png"
+        src={order.img || order.image}
         alt={name}
         className="w-14 h-14 sm:w-12 sm:h-12 object-cover rounded-md"
       />

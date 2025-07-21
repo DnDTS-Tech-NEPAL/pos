@@ -261,7 +261,7 @@ const InvoicePage = () => {
                                   >
                                     View Invoice
                                   </a>
-                                  <button
+                                  {/* <button
                                     onClick={() => {
                                       setSelectedInvoiceToCancel(inv.name);
                                       setShowCancelPopup(true);
@@ -282,7 +282,7 @@ const InvoicePage = () => {
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4"
                                       />
                                     </svg>
-                                  </button>
+                                  </button> */}
                                 </>
                               ) : (
                                 <button
@@ -302,36 +302,62 @@ const InvoicePage = () => {
               </div>
 
               {totalPages > 1 && (
-                <div className="flex justify-center mt-6 gap-2 bg-white flex-wrap text-sm shrink-0">
-                  <button
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-                    disabled={currentPage === 1}
-                  >
-                    Prev
-                  </button>
-                  {[...Array(totalPages)].map((_, i) => (
+                <div className="flex justify-center mt-6 gap-2  flex-wrap text-sm shrink-0">
+                  <div className="flex justify-center mt-6 gap-2 bg-white flex-wrap text-sm shrink-0">
                     <button
-                      key={i}
-                      onClick={() => setCurrentPage(i + 1)}
-                      className={`px-3 py-1 rounded transition ${
-                        currentPage === i + 1
-                          ? "bg-blue-600 text-white"
-                          : "bg-gray-100 hover:bg-gray-200"
-                      }`}
+                      onClick={() => setCurrentPage(1)}
+                      className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+                      disabled={currentPage === 1}
                     >
-                      {i + 1}
+                      First
                     </button>
-                  ))}
-                  <button
-                    onClick={() =>
-                      setCurrentPage((p) => Math.min(totalPages, p + 1))
-                    }
-                    className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </button>
+                    <button
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+                      disabled={currentPage === 1}
+                    >
+                      Prev
+                    </button>
+
+                    {currentPage > 1 && (
+                      <button
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                        className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
+                      >
+                        {currentPage - 1}
+                      </button>
+                    )}
+
+                    <button className="px-3 py-1 rounded bg-blue-600 text-white">
+                      {currentPage}
+                    </button>
+
+                    {currentPage < totalPages && (
+                      <button
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200"
+                      >
+                        {currentPage + 1}
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() =>
+                        setCurrentPage((p) => Math.min(totalPages, p + 1))
+                      }
+                      className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </button>
+                    <button
+                      onClick={() => setCurrentPage(totalPages)}
+                      className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+                      disabled={currentPage === totalPages}
+                    >
+                      Last
+                    </button>
+                  </div>
                 </div>
               )}
             </>

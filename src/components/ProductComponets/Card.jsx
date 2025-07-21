@@ -1,11 +1,23 @@
 import React, { useState } from "react";
 
-const FALLBACK_IMAGE_URL =
-  "https://edumart.dndts.net/files/shiva.png";
+const FALLBACK_IMAGE_URL = "https://edumart.dndts.net/files/shiva.png";
 
 const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
   const [zoomPosition, setZoomPosition] = useState({ x: "50%", y: "50%" });
+  console.log(product);
 
+  /*************  ✨ Windsurf Command ⭐  *************/
+  /**
+   * Handles the click event to add a product to the order.
+   * Checks if the product is in stock before adding. If the product
+   * is already in the order, it increments the quantity, ensuring
+   * not to exceed stock quantity. If the product is not in the order,
+   * it adds the product with the initial quantity of 1.
+   * Displays an error message if the product is out of stock or
+   * if the desired quantity exceeds available stock.
+   */
+
+  /*******  ed43bcc2-afd0-47de-841d-d53006eff3e8  *******/
   const handleClick = () => {
     if (typeof product.stock_qty !== "number" || product.stock_qty <= 0) {
       setMessage({
@@ -36,10 +48,9 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
         )
       );
     } else {
-      console.log(product)
       setOrders((prevOrders) => [
         {
-          orderId: product.barcode|| Math.random().toString(36).substr(2, 9),
+          orderId: product.barcode || Math.random().toString(36).substr(2, 9),
           itemCode: product.item_code,
           name: product.item_name,
           price:
@@ -49,7 +60,7 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
           quantity: 1,
           stock_qty: product.stock_qty,
           discount: product.discount || 0,
-          taxRate :product.tax_rate||0,
+          taxRate: product.tax_rate || 0,
         },
         ...prevOrders,
       ]);
@@ -86,10 +97,11 @@ const Card = ({ product, setOrders, orders, className = "", setMessage }) => {
       {/* Stock Badge */}
       {typeof product.stock_qty === "number" && (
         <div
-          className={`absolute top-2 right-2 z-10 px-2 py-0.5 rounded-full text-[10px] font-semibold shadow-sm ${
+          className={`absolute top-2 right-2 z-10 px-2 py-0.5 rounded-full text-[12px] font-semibold shadow-sm ${
             product.stock_qty === 0 ? "bg-red-500" : "bg-green-600"
           } text-white`}
         >
+          Stock: &nbsp;
           {product.stock_qty}
         </div>
       )}
