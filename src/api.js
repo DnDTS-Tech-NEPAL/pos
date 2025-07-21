@@ -10,7 +10,7 @@ const apiClient = axios.create();
 apiClient.interceptors.request.use(
   (config) => {
     if (AUTH_TOKEN) {
-      config.headers["Authorization"] = `Bearer ${AUTH_TOKEN}`;
+      config.headers["Authorization"] = `${AUTH_TOKEN}`;
     }
     return config;
   },
@@ -23,8 +23,8 @@ apiClient.interceptors.response.use(
   (err) => {
     // Example: logout on 401 Unauthorized if needed
     if (err.response && err.response.status === 401) {
-      api.logout();
-      window.location.href = "/login";
+      // api.logout();
+      // window.location.href = "/login";
     }
     return Promise.reject(err);
   }
@@ -78,6 +78,7 @@ const api = {
 
       AUTH_TOKEN = token;
       localStorage.setItem("auth_token", token);
+      console.log(AUTH_TOKEN);
 
       return token;
     } catch (err) {
