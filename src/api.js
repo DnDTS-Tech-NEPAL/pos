@@ -23,8 +23,8 @@ apiClient.interceptors.response.use(
   (err) => {
     // Example: logout on 401 Unauthorized if needed
     if (err.response && err.response.status === 401) {
-      // api.logout();
-      // window.location.href = "/login";
+      api.logout();
+      window.location.href = "/login";
     }
     return Promise.reject(err);
   }
