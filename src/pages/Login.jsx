@@ -43,7 +43,7 @@ const Login = () => {
           <div className="text-center mb-6">
             <img src="/logo.png" alt="Logo" className="h-12 mx-auto mb-2" />
             <h2 className="text-2xl font-bold text-gray-800">
-              Login to Dots and Dashes POS
+              Login to POS
             </h2>
           </div>
 
