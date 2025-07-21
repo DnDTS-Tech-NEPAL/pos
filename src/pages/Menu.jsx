@@ -24,6 +24,10 @@ const Menu = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [discountType, setDiscountType] = useState("flat");
+  const handleLogout = async () => {
+    await api.logout();
+    window.location.href = "/login"; // Redirect after logout
+  };
 
   useEffect(() => {
     api
@@ -180,6 +184,12 @@ const Menu = () => {
               className="w-full"
             />
           </div>
+          <button
+            onClick={handleLogout}
+            className="bg-[#C51118] cursor-pointer text-white px-4 py-2 rounded-xl hover:bg-red-600 transition"
+          >
+            Logout
+          </button>
 
           <div className="w-full lg:w-auto">
             <CustomerSearch
