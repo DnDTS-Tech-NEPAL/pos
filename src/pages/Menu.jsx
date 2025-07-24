@@ -222,9 +222,10 @@ const Menu = () => {
       </div>
 
       {/* Main Layout */}
-      <div className="flex-1 px-2 md:px-4 py-2 overflow-hidden">
-        <div className="grid lg:grid-cols-2  h-screen">
-          <div className=" overflow-y-auto">
+      <div className="flex-1 px-2 md:px-4 py-2 ">
+        <div className="grid lg:grid-cols-2 h-full gap-4">
+          {/* Product Section */}
+          <div className="h-full overflow-y-auto pr-2">
             <Product
               products={filteredProducts}
               orders={orders}
@@ -232,7 +233,9 @@ const Menu = () => {
               setMessage={setMessage}
             />
           </div>
-          <div className="lg:col-span-1 border-t lg:border-t-0  border-gray-200 pt-4 lg:pt-6  overflow-y-auto">
+
+          {/* Order Section */}
+          <div className="h-full ">
             <Order
               orders={orders}
               setOrders={setOrders}
@@ -241,8 +244,8 @@ const Menu = () => {
               redeemedPoints={redeemedPoints}
               setRedeemedPoints={setRedeemedPoints}
               customer={customer}
-              discount={discountAmount} // ✅ pass value correctly
-              setDiscount={setDiscountAmount} // ✅ pass setter correctly
+              discount={discountAmount}
+              setDiscount={setDiscountAmount}
               discountType={discountType}
               setDiscountType={setDiscountType}
             />

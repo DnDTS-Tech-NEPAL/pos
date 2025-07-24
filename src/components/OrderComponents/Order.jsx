@@ -95,7 +95,7 @@ const Order = ({
   };
 
   return (
-    <div className="flex flex-col min-h-full h-90vh">
+    <div className="flex flex-col h-full relative">
       <div className="flex-1 overflow-y-auto p-4 max-h-[55vh]">
         <div className="space-y-3 overflow-auto">
           {orders.map((order) => (
